@@ -1,0 +1,1 @@
+json.extract! @order, :id, :item_id, :item_price, :item_count, :status, :name, :email, :perferred_contact, :shipping_info, :delivery_type, :shipping_price, :order_id, :special_instructions, :created_at, :updated_at

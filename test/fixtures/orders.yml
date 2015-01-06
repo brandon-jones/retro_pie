@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item_id: 1
+  item_price: 1.5
+  item_count: 1
+  status: MyString
+  name: MyString
+  email: MyString
+  perferred_contact: MyText
+  shipping_info: MyText
+  delivery_type: MyString
+  shipping_price: 1.5
+  order_id: MyString
+  special_instructions: MyText
+
+two:
+  item_id: 1
+  item_price: 1.5
+  item_count: 1
+  status: MyString
+  name: MyString
+  email: MyString
+  perferred_contact: MyText
+  shipping_info: MyText
+  delivery_type: MyString
+  shipping_price: 1.5
+  order_id: MyString
+  special_instructions: MyText

@@ -1,0 +1,7 @@
+%dl
+	-@faqs.each do |faq|
+		%p
+			%dt
+				=faq["question"]
+			%dd
+				=faq["answer"]

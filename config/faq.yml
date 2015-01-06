@@ -1,0 +1,24 @@
+-
+  question: The screen is just words.
+  answer: Try typing. Do those letters show up? If so hit backspace to remove the characters and type “sudo reboot” then press enter. If that did not work type “reboot” followed by enter.
+-
+  question: Nothing is responding and I can’t type anything
+  answer: Make sure the keyboard and controller is plugged in. If they are both plugged in but the Pie is not responding you may have to pull the power cord. Please only do this as a last resort as it can destroy the SD card.
+-
+  question: Every time I try to select a game I change the console
+  answer: Stop pushing left and right. I know some controllers are more sensitive and others and some just suck but you change the console by pressing left and right on the direction pad. 
+-
+  question: I have no games
+  answer: You must figure out how to download the ROMs. I can not tell you how to google nes roms or snes roms. All I can say is I do not condone any illegal activities.
+-
+  question: I am  missing consoles
+  answer: Consoles only show up if you have games for that system in the game folder
+-
+  question: How do I shut down the Pie
+  answer: You don’t. Well you can but to do so you hold the keys Alt + F4 on the keyboard. A command prompt should appear after about 10 seconds. Type “sudo power off”. This will shut down the device. If you just pull out the power cord you will eventually destroy the SD card.
+-
+  question: How do I transfer the ROMs to my device
+  answer: If you bought a wifi dongle and gave me your wifi details I have put that in for you. Power on your device and it should connect to your network automatically. If not, you must plug the Pie into your network using a network cable. Once the device is powered on and on network you should see it in your network on any computer that is on the same network (and configured to see other computers on the network).
+-
+  question: How do I power on my device
+  answer: Plug it in
