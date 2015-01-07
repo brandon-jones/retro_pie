@@ -1,0 +1,79 @@
+- params["order"] = {} unless params["order"]
+= form_for(@order) do |f|
+  %p.text-center
+    All new orders start out with the base model and you can upgrade from there. The base model costs $#{@base_price.to_s}. This includes my fee for setting it up but does not include $#{@shipping} shipping and handeling.
+
+  -@categories.keys.each do |key|
+    - if @categories[key].count > 0
+      .p  
+        %h3
+          =key
+      %table.table
+        %thead
+          %tr
+            %th 
+            %th Name
+            %th Image
+            %th Price
+            %th Quantity
+        %tbody
+          -@categories[key].each do |item|
+            %tr{class: "#{key.downcase} item-row"}
+              %td= check_box_tag key.downcase, item.id, item.base_item, {class: 'checkbox-price-changer price-changer', disabled: item.base_item}
+              %td{class: 'title'}= item.title
+              %td
+                %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
+              %td{class: 'price'}
+                =hidden_field_tag :actual_price, item.markup.gsub('$','')
+                =figure_increase_cost(key,item.markup)
+              %td{class: 'quantity'}
+                =quantity_selector(item).html_safe
+  .float-right
+    %h3.text-right
+      Total
+      %span.total
+        $90
+
+  - if @order.errors.any?
+    #error_explanation.field.form-group
+      %h2
+        = pluralize(@order.errors.count, "error")
+        prohibited this order from being saved:
+      %ul
+        - @order.errors.full_messages.each do |msg|
+          %li= msg
+  .field.form-group
+    = f.label :name
+    %br
+      = f.text_field :name, class: 'form-control'
+  .field.form-group
+    = f.label :email
+    %br
+      = f.text_field :email, class: 'form-control'
+  .field.form-group
+    = f.label :perferred_contact
+    %br
+      = f.text_area :perferred_contact, class: 'form-control'
+  .field.form-group
+    = f.label :delivery_type
+    %br
+    = f.select :delivery_type, @delivery_types, { class: 'form-control', selected: params["order"]["delivery_type"] || 'local_pickup' }
+    %p
+      You must come to me for it to be a local pickup
+  -d = params["order"]["delivery_type"] || 'local_pickup'
+  -display = (d=='local_pickup') ? 'display:none' : 'display:block'
+  #shipping{ style: "#{display}"}
+    .field.form-group
+      = f.label :shipping_info
+      %br
+        = f.text_area :shipping_info, class: 'form-control'
+    .field.form-group
+      = f.label :shipping_price
+      %br
+        = f.text_field :shipping_price, {value: (params["order"]["delivery_type"]=='local_pickup' ? '0' : '$10') , class: 'form-control', disabled: true }
+  .field.form-group
+    = f.label :special_instructions
+    %br
+      = f.text_area :special_instructions, class: 'form-control'
+  .actions
+    = f.submit 'Verify Order'

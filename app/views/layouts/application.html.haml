@@ -22,9 +22,9 @@
     %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"}
     %div.container-fluid
       %div.row
-        %div.col-md-6.col-md-offset-3
+        %div.col-md-12
           - if @title
-            %h1.text-center
+            %h1.text-center#title
               =@title
           = render :partial => 'static_pages/header'
           = yield

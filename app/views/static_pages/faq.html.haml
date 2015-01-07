@@ -1,7 +1,10 @@
-%dl
-	-@faqs.each do |faq|
-		%p
-			%dt
-				=faq["question"]
-			%dd
-				=faq["answer"]
+%div.container-fluid
+  %div.row
+    %div.col-md-8.col-md-offset-2
+      %dl
+        -@faqs.each do |faq|
+          %p
+            %dt
+              =faq["question"]
+            %dd
+              =faq["answer"]

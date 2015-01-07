@@ -25,6 +25,10 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'haml', '~> 4.0.5'
 
+require 'nokogiri'
+
+gem 'rest-client', '~> 1.7.2'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

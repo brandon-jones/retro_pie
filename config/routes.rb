@@ -1,4 +1,8 @@
 RetroPie::Application.routes.draw do
+  resources :order_items
+
+  resources :statuses
+
   resources :items
 
   resources :orders
@@ -10,6 +14,8 @@ RetroPie::Application.routes.draw do
   get 'order_status', to: 'orders#status'
 
   get 'faq', to: 'static_pages#faq'
+
+  post 'scrape_data', to: 'items#scrape_data'
 
   root 'static_pages#index'
 

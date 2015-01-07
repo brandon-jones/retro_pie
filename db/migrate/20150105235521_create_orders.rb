@@ -1,10 +1,7 @@
 class CreateOrders < ActiveRecord::Migration
   def change
     create_table :orders do |t|
-      t.integer :item_id
-      t.float :item_price
-      t.integer :item_count
-      t.string :status
+      t.string :status_id
       t.string :name
       t.string :email
       t.text :perferred_contact
@@ -13,6 +10,7 @@ class CreateOrders < ActiveRecord::Migration
       t.float :shipping_price
       t.string :order_id
       t.text :special_instructions
+      t.float :total
 
       t.timestamps
     end

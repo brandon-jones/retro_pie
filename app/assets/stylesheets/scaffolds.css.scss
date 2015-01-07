@@ -1,3 +1,11 @@
+#header {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+#title {
+  
+}
 body {
   background-color: #fff;
   color: #333;
@@ -42,11 +50,9 @@ div {
 .field_with_errors {
   padding: 2px;
   background-color: red;
-  display: table;
 }
 
 #error_explanation {
-  width: 450px;
   border: 2px solid red;
   padding: 7px;
   padding-bottom: 0;
@@ -59,8 +65,7 @@ div {
     font-size: 12px;
     margin: -7px;
     margin-bottom: 0px;
-    background-color: #c00;
-    color: #fff;
+    background-color: red;
   }
   ul li {
     font-size: 12px;

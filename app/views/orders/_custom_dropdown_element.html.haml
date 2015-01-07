@@ -1,0 +1,5 @@
+.li{class: "#{category.category.name.downcase}-#{category.id}"}
+  %a{"aria-expanded" => "false", "aria-haspopup" => "true", "data-target" => "#", "data-toggle" => "dropdown", :href => "", :role => "button"}
+    =category.title
+    =figure_increase_cost(category.category.name,category.markup)
+    %img{:alt => "#{category.title}", :src => "#{category.image_url}", :style => "width:50px;height:50px", :class => 'pull-right'}/

@@ -1,3 +1,29 @@
 // Place all the styles related to the Orders controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#order_shipping_info {
+	min-height: 12em;
+}
+
+#order_special_instructions {
+	min-height: 12em;
+}
+
+#order_perferred_contact {
+	min-height: 5em;
+}
+
+td.title {
+    width:70%;
+}
+
+#total-box {
+	position: fixed;
+	top: 20;
+  right: 5;
+  z-index: 999;
+  background-color: #e0e0e0;
+  padding: 2em .5em 2em .5em;
+  border-radius: 10px;
+}

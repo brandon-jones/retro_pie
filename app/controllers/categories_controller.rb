@@ -5,21 +5,25 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
+    @title = "All Categories"
     @categories = Category.all
   end
 
   # GET /categories/1
   # GET /categories/1.json
   def show
+    @title = @category.name
   end
 
   # GET /categories/new
   def new
+    @title = "New Category"
     @category = Category.new
   end
 
   # GET /categories/1/edit
   def edit
+    @title = "Edit Category"
   end
 
   # POST /categories
@@ -46,6 +50,7 @@ class CategoriesController < ApplicationController
         format.html { redirect_to @category, notice: 'Category was successfully updated.' }
         format.json { head :no_content }
       else
+        @title = "All Categories"
         format.html { render action: 'edit' }
         format.json { render json: @category.errors, status: :unprocessable_entity }
       end

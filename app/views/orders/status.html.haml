@@ -1,0 +1,16 @@
+%div.container-fluid
+  %div.row
+    %div.col-md-8.col-md-offset-2
+      -if @order_status
+        %pre
+          =@order_status.html_safe
+      = form_tag("/order_status", method: "get", class: "form") do
+        %div.form-group
+          %p
+            = label_tag(:order_id_label, "Order ID:")
+          = text_field_tag(:order_id, nil, class: "form-control")
+        %div.form-group
+          .actions
+            = submit_tag("Check order status",class: 'btn btn-default')
+      Order status usually follow the follow progression:
+      ordered > 

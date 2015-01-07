@@ -5,22 +5,33 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
+    @title = "Listing Items"
     @items = Item.all
   end
 
   # GET /items/1
   # GET /items/1.json
   def show
+    @title = @item.title
+  end
+
+  def scrape_data
+    @item_values = Item.scrape_data(params)
+
+    render json: @item_values
   end
 
   # GET /items/new
   def new
     @title = 'New Item'
+    @categories = Category.all
     @item = Item.new
   end
 
   # GET /items/1/edit
   def edit
+    @title = "Editing Items"
+    @categories = Category.all
   end
 
   # POST /items
@@ -33,6 +44,7 @@ class ItemsController < ApplicationController
         format.html { redirect_to @item, notice: 'Item was successfully created.' }
         format.json { render action: 'show', status: :created, location: @item }
       else
+        @categories = Category.all
         format.html { render action: 'new' }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -47,6 +59,7 @@ class ItemsController < ApplicationController
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
         format.json { head :no_content }
       else
+        @categories = Category.all
         format.html { render action: 'edit' }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -71,6 +84,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:title, :description, :amazon_url, :image_url, :price, :base_item, :category_id)
+      params.require(:item).permit(:title, :description, :amazon_url, :image_url, :price, :base_item, :category_id, :markup, :title_locked, :description_locked, :image_url_locked, :title_css, :description_css, :image_url_css, :price_css)
     end
 end

@@ -5,3 +5,19 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Category.create(name: "Pie")
+Category.create(name: "Memory Card")
+Category.create(name: "Controller")
+Category.create(name: "Case")
+Category.create(name: "HDMI cable")
+Category.create(name: "Internet")
+
+Status.create(name: "Unsubmitted")
+Status.create(name: "Ordered")
+Status.create(name: "Verified")
+Status.create(name: "Waiting for Payment")
+Status.create(name: "Building")
+Status.create(name: "Shipped")
+Status.create(name: "Returned")
+Status.create(name: "Closed")

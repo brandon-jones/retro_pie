@@ -1,0 +1,61 @@
+= form_for(@item) do |f|
+  - if @item.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@item.errors.count, "error")
+        prohibited this item from being saved:
+      %ul
+        - @item.errors.full_messages.each do |msg|
+          %li= msg
+  .field.form-group
+    = f.label :title_locked
+    = f.check_box :title_locked
+  .field.form-group
+    = f.label :title
+    = f.text_field :title, class: 'form-control'
+  .field.form-group
+    = f.label :title_css
+    = f.text_field :title_css, {class: 'form-control', value: '#productTitle'}
+  .field.form-group
+    = f.label :description_locked
+    = f.check_box :description_locked
+  .field.form-group
+    = f.label :description
+    = f.text_area :description, class: 'form-control'
+  .field.form-group
+    = f.label :description_css
+    = f.text_field :description_css, {class: 'form-control', value: '#feature-bullets'}
+  .field.form-group
+    = f.label :amazon_url
+    = f.text_field :amazon_url, class: 'form-control'
+    = button_tag 'Scrape Data', :type => 'button', id: 'scrape_data'
+    #scrape-info
+  .field.form-group
+    = f.label :image_url_locked
+    = f.check_box :image_url_locked
+  .field.form-group
+    = f.label :image_url
+    = f.text_field :image_url, class: 'form-control'
+  .field.form-group
+    = f.label :image_url_css
+    = f.text_field :image_url_css, {class: 'form-control', value: '#imgTagWrapperId img'}
+  .field.form-group
+    = f.label :price
+    %small
+      in $
+    = f.text_field :price, class: 'form-control'
+    = f.label :price_css
+    = f.text_field :price_css, {class: 'form-control', value: '#priceblock_ourprice'}
+  .field.form-group
+    = f.label :markup
+    %small
+      $ for price, % for percent markup, formula with x for more complicated stuff
+    = f.text_field :markup, class: 'form-control'
+  .field.form-group
+    = f.label :category_id
+    = f.collection_select :category_id, @categories, :id, :name
+  .field.form-group
+    = f.label :base_item
+    = f.check_box :base_item
+  .actions.form-group
+    = f.submit
