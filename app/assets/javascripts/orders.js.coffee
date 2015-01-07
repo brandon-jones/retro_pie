@@ -10,9 +10,10 @@ scrapeData = (event) ->
   if $("#order_delivery_type").val() =='delivery'
     $('#shipping').show(300)
     $('#order_shipping_price').val('$10')
+    $('.total')[0].text = "test" + $('.total')[0].text
   else
+    $('#order_shipping_price').val('$0')
     $('#shipping').hide(300)
-    $('#order_shipping_price').val('0')
   return
 
 updateQuantity = (event) ->
@@ -22,6 +23,7 @@ updateQuantity = (event) ->
       quantity = getQuantity(this)
       price = getPrice(this, quantity)
       total_price =  parseInt(total_price) + parseInt(price)
+    total_price = total_price + parseInt($('#order_shipping_price').val().replace('$',''))
   $('.total').text("$"+total_price)
 
 

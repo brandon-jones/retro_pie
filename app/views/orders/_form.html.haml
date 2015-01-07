@@ -28,11 +28,10 @@
                 =figure_increase_cost(key,item.markup)
               %td{class: 'quantity'}
                 =quantity_selector(item).html_safe
-  .float-right
-    %h3.text-right
-      Total
-      %span.total
-        $90
+  %h3.text-center#total-box
+    Total
+    %span.total
+      $90
 
   - if @order.errors.any?
     #error_explanation.field.form-group
