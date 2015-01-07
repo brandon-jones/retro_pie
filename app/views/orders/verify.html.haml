@@ -1,0 +1,45 @@
+%div.container-fluid
+  %div.row
+    %div.col-md-6.col-md-offset-3
+      %p#notice= notice
+      .items
+        =build_receipt_table(@order.order_items).html_safe
+      = form_tag("/verify_order", method: "post", class: "form") do
+        =hidden_field_tag :order_id, @order.order_id, {name: "order[order_id]"}
+        %p
+          %strong Status:
+          = @order.status
+        %p
+          %strong Name:
+          = @order.name
+        %p
+          %strong Email:
+          = @order.email
+        %p
+          %strong Perferred contact:
+          = @order.perferred_contact
+        -if @order.shipping_info.length > 0
+          %p
+            %strong Shipping info:
+            = @order.shipping_info
+        %p
+          %strong Delivery type:
+          = @order.delivery_type.split('_').collect{ |c| c.capitalize }.join(' ')
+        %p
+          %strong Shipping price:
+          = @order.shipping_price
+        %p
+          %strong Order ID:
+          = @order.order_id
+        -if @order.special_instructions.length > 0  
+          %p
+            %strong Special instructions:
+            = @order.special_instructions
+        %br
+        %h2
+          Please write down your order number:
+          %br
+          =@order.order_id
+        %p.text-center
+          = link_to 'Edit Order', edit_order_path(@order), class: 'btn btn-primary btn-lg'
+          = submit_tag 'Verify Order', { class: 'btn btn-default btn-lg', :confirm => "Are you sure you want this. I will contact you using the provided contact information."}

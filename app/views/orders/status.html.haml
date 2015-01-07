@@ -13,4 +13,32 @@
           .actions
             = submit_tag("Check order status",class: 'btn btn-default')
       Order status usually follow the follow progression:
-      ordered > 
+      %ul
+        %li
+          %strong
+            Unsubmitted:
+          You need to verify your order before I will contact you
+        %li
+          %strong
+            Ordered:
+          Waiting to be contact by me
+        %li
+          %strong
+            Verified:
+          You have been verified by me and payment has been arranged
+        %li
+          %strong
+            Waiting for Payment: 
+          Waiting to get payment
+        %li
+          %strong
+            Building:
+          I am building your device. should take no more than a day or two.
+        %li
+          %strong
+            Shipped:
+          I have shipped the Pie
+        %li
+          %strong
+            Closed:
+          Either I have not heard back from you or we have talked and I know you are happy.

@@ -1,8 +1,6 @@
 - params["order"] = {} unless params["order"]
-= form_for(@order) do |f|
-  %p.text-center
-    All new orders start out with the base model and you can upgrade from there. The base model costs $#{@base_price.to_s}. This includes my fee for setting it up but does not include $#{@shipping} shipping and handeling.
-
+- order = Hash.new
+= form_tag("/orders", method: "post", class: "form") do
   -@categories.keys.each do |key|
     - if @categories[key].count > 0
       .p  
@@ -19,19 +17,23 @@
         %tbody
           -@categories[key].each do |item|
             %tr{class: "#{key.downcase} item-row"}
-              %td= check_box_tag key.downcase, item.id, item.base_item, {class: 'checkbox-price-changer price-changer', disabled: item.base_item}
+              %td= check_box_tag key.downcase, item.id, item.base_item, {class: 'checkbox-price-changer price-changer', disabled: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", checked: item.base_item || @order.order_items.collect{ |c| c.item_id }.include?(item.id)}
               %td{class: 'title'}= item.title
               %td
                 %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
               %td{class: 'price'}
-                =hidden_field_tag :actual_price, item.markup.gsub('$','')
+                =hidden_field_tag :actual_price, item.markup.gsub('$',''), {name: "order[items][#{item.category.name}][#{item.id}][price]"}
+                =hidden_field_tag :base_item, item.base_item, {name: "order[items][#{item.category.name}][#{item.id}][base_item]"}
                 =figure_increase_cost(key,item.markup)
-              %td{class: 'quantity'}
+              %td
                 =quantity_selector(item).html_safe
+  =hidden_field_tag :total_price, @order.total || $base_price, {id: 'clean-total', name: "order[total]"}
+  =hidden_field_tag :order_id, @order.order_id || '', { name: "order[order_id]"}
   %h3.text-center#total-box
+    %span.shipping-cost
     Total
     %span.total
-      $90
+      =format_init_price
 
   - if @order.errors.any?
     #error_explanation.field.form-group
@@ -41,38 +43,38 @@
       %ul
         - @order.errors.full_messages.each do |msg|
           %li= msg
-  .field.form-group
-    = f.label :name
+  .field.form-group{class: "#{any_errors('name')}"}
+    = label_tag :name
     %br
-      = f.text_field :name, class: 'form-control'
-  .field.form-group
-    = f.label :email
+      = text_field_tag :name, nil, {class: "form-control", name: 'order[name]'}
+  .field.form-group{class: "#{any_errors('email')}"}
+    = label_tag :email
     %br
-      = f.text_field :email, class: 'form-control'
-  .field.form-group
-    = f.label :perferred_contact
+      = email_field_tag :email, nil, {class: 'form-control', name: 'order[email]'}
+  .field.form-group{class: "#{any_errors('perferred_contact')}"}
+    = label_tag :perferred_contact
     %br
-      = f.text_area :perferred_contact, class: 'form-control'
-  .field.form-group
-    = f.label :delivery_type
+      = text_area_tag :perferred_contact, nil, {class: 'form-control', name: 'order[perferred_contact]'}
+  .field.form-group{class: "#{any_errors('delivery_type')}"}
+    = label_tag :delivery_type
     %br
-    = f.select :delivery_type, @delivery_types, { class: 'form-control', selected: params["order"]["delivery_type"] || 'local_pickup' }
+    = select_tag :delivery_type, options_for_select(@delivery_types), { class: 'form-control', selected: params["order"]["delivery_type"] || 'local_pickup', name: 'order[delivery_type]' }
     %p
       You must come to me for it to be a local pickup
   -d = params["order"]["delivery_type"] || 'local_pickup'
   -display = (d=='local_pickup') ? 'display:none' : 'display:block'
   #shipping{ style: "#{display}"}
-    .field.form-group
-      = f.label :shipping_info
+    .field.form-group{class: "#{any_errors('shipping_info')}"}
+      = label_tag :shipping_info
       %br
-        = f.text_area :shipping_info, class: 'form-control'
+        = text_area_tag :shipping_info, nil, {class: 'form-control', name: 'order[shipping_info]'}
     .field.form-group
-      = f.label :shipping_price
+      = label_tag :shipping_price
       %br
-        = f.text_field :shipping_price, {value: (params["order"]["delivery_type"]=='local_pickup' ? '0' : '$10') , class: 'form-control', disabled: true }
-  .field.form-group
-    = f.label :special_instructions
+        = text_field_tag :shipping_price, (params["order"]["delivery_type"]=='delivery' ? "$"+$shipping.to_s : '0') , {class: 'form-control', disabled: true, name: 'order[shipping_price]' }
+  .field.form-group{class: "#{any_errors('special_instructions')}"}
+    = label_tag :special_instructions
     %br
-      = f.text_area :special_instructions, class: 'form-control'
+      = text_area_tag :special_instructions, nil, {class: 'form-control', name: 'order[special_instructions]'}
   .actions
-    = f.submit 'Verify Order'
+    = submit_tag 'Verify Order'

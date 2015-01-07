@@ -2,29 +2,33 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
-  $("#order_delivery_type").on "change", scrapeData
+  $("#delivery_type").on "change", scrapeData
 
   $(".price-changer").on "change", updateQuantity
 
 scrapeData = (event) ->
-  if $("#order_delivery_type").val() =='delivery'
+  if $("#delivery_type").val() =='delivery'
     $('#shipping').show(300)
-    $('#order_shipping_price').val('$10')
-    $('.total')[0].text = "test" + $('.total')[0].text
+    $('#shipping_price').val("$<%= $shipping %>")
+    $('.shipping-cost').html('Shipping: + $<%=$shipping%><br>')
+    updateQuantity()
   else
-    $('#order_shipping_price').val('$0')
+    $('#shipping_price').val('$0')
     $('#shipping').hide(300)
+    $('.shipping-cost').html('')
+    updateQuantity()
   return
 
 updateQuantity = (event) ->
-  total_price = 90
+  total_price = <%= $base_price %>
   $(".item-row").each (element) ->
     if isRowActive(this)
       quantity = getQuantity(this)
       price = getPrice(this, quantity)
       total_price =  parseInt(total_price) + parseInt(price)
-    total_price = total_price + parseInt($('#order_shipping_price').val().replace('$',''))
+  total_price = total_price + parseInt($('#shipping_price').val().replace('$',''))
   $('.total').text("$"+total_price)
+  $('#clean-total').val(total_price)
 
 
 getPrice = (row, quantity) ->

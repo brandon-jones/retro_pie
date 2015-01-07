@@ -1,10 +1,13 @@
 %div.container-fluid
   %div.row
     %div.col-md-6.col-md-offset-3
+      %p.text-center
+        All new orders start out with the base model and you can upgrade from there. The base model costs $#{$base_price.to_s}. This includes my fee for setting it up but does not include $#{$shipping} shipping. You may pick up locally you are near enough to me.
       = render 'form'
-      = link_to 'Back', orders_path
-    .col-md-3
+      = link_to 'Home', root_path
+    .col-md-3.text-center
       %h3#total-box-floater
+        %span.shipping-cost
         Total:
         %span.total
-          $90
+          =format_init_price

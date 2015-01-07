@@ -1,4 +1,6 @@
 class StaticPagesController < ApplicationController
+    before_action :authenticate, only: :manage
+    
   def index
     @title = "Play all the games!"
   end

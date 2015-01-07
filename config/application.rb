@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module RetroPie
   class Application < Rails::Application
+    
+    temp_yml_data = YAML.load_file("config/base_and_shipping.yml")
+    $base_price = temp_yml_data["base_price"]
+    $shipping = temp_yml_data["shipping"]
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

@@ -1,31 +1,33 @@
-%p#notice= notice
-%p
-  %strong Status:
-  = @order.status
-%p
-  %strong Name:
-  = @order.name
-%p
-  %strong Email:
-  = @order.email
-%p
-  %strong Perferred contact:
-  = @order.perferred_contact
-%p
-  %strong Shipping info:
-  = @order.shipping_info
-%p
-  %strong Delivery type:
-  = @order.delivery_type
-%p
-  %strong Shipping price:
-  = @order.shipping_price
-%p
-  %strong Order:
-  = @order.order_id
-%p
-  %strong Special instructions:
-  = @order.special_instructions
-= link_to 'Edit', edit_order_path(@order)
-|
-\#{link_to 'Back', orders_path}
+%div.container-fluid
+  %div.row
+    %div.col-md-8.col-md-offset-2
+      %p#notice= notice
+      =build_receipt_table(@order.order_items).html_safe
+      %p
+        %strong Status:
+        = @order.status
+      %p
+        %strong Name:
+        = @order.name
+      %p
+        %strong Email:
+        = @order.email
+      %p
+        %strong Perferred contact:
+        = @order.perferred_contact
+      %p
+        %strong Shipping info:
+        = @order.shipping_info
+      %p
+        %strong Delivery type:
+        = @order.delivery_type
+      %p
+        %strong Shipping price:
+        = @order.shipping_price
+      %p
+        %strong Order:
+        = @order.order_id
+      %p
+        %strong Special instructions:
+        = @order.special_instructions
+      #{link_to 'Home', root_path}

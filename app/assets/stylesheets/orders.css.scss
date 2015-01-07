@@ -2,15 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-#order_shipping_info {
+#shipping_info {
 	min-height: 12em;
 }
 
-#order_special_instructions {
+#special_instructions {
 	min-height: 12em;
 }
 
-#order_perferred_contact {
+#perferred_contact {
 	min-height: 5em;
 }
 
@@ -20,7 +20,8 @@ td.title {
 
 #total-box {
   background-color: #e0e0e0;
-  padding: 2em .5em 2em .5em;
+  padding-top: 1em;
+  padding-bottom: 1em;
   border-radius: 10px;
 }
 #total-box-floater {
