@@ -1,5 +1,16 @@
 module OrdersHelper
 
+	def caret(current)
+		if @sort_by == current
+			if @sort_order == 'ASC'
+				return '<i class="fa fa-caret-up"></i>'
+			else
+				return '<i class="fa fa-caret-down"></i>'
+			end
+		end
+		return ''
+	end
+
 	def figure_increase_cost(this_category,this_price)
 		cat_id = Category.where(name: this_category).first.id
 		if base_item = Item.where(category_id: cat_id, base_item: true).first

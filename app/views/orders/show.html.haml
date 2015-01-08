@@ -5,7 +5,7 @@
       =build_receipt_table(@order.order_items).html_safe
       %p
         %strong Status:
-        = @order.status
+        = @order.status.name
       %p
         %strong Name:
         = @order.name

@@ -1,6 +1,12 @@
 %div.container-fluid
   %div.row
     %div.col-md-6.col-md-offset-3
+      %h3.text-center.red
+        Your Order is not complete! 
+        %br
+        Please verify below to complete your order
+      %h4
+        Please note. I will get the best items I can for the money. This means that the items in the pictures are used as representations. I will get you the best item I can that is aviabled.
       %p#notice= notice
       .items
         =build_receipt_table(@order.order_items).html_safe
@@ -8,7 +14,7 @@
         =hidden_field_tag :order_id, @order.order_id, {name: "order[order_id]"}
         %p
           %strong Status:
-          = @order.status
+          = @order.status.name
         %p
           %strong Name:
           = @order.name
@@ -25,21 +31,25 @@
         %p
           %strong Delivery type:
           = @order.delivery_type.split('_').collect{ |c| c.capitalize }.join(' ')
-        %p
-          %strong Shipping price:
-          = @order.shipping_price
+        - if @order.delivery_type == 'delivery'
+          %p
+            %strong Shipping price:
+            = @order.shipping_price
         %p
           %strong Order ID:
           = @order.order_id
+        %p
+          %strong Order date:
+          = local_time(@order.created_at, '%B %e, %Y')
         -if @order.special_instructions.length > 0  
           %p
             %strong Special instructions:
             = @order.special_instructions
         %br
-        %h2
-          Please write down your order number:
+        %h3
+          Please write down your order id:
           %br
           =@order.order_id
         %p.text-center
-          = link_to 'Edit Order', edit_order_path(@order), class: 'btn btn-primary btn-lg'
+          = link_to 'Edit Order', edit_order_path(@order.order_id), class: 'btn btn-primary btn-lg'
           = submit_tag 'Verify Order', { class: 'btn btn-default btn-lg', :confirm => "Are you sure you want this. I will contact you using the provided contact information."}

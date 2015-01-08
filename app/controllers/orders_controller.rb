@@ -1,12 +1,31 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, except: [:new, :create, :status]
-
+  before_action :authenticate, except: [:new, :create, :status, :verify, :verify_order, :show]
+  before_action :poor_auth, only: [ :verify, :verify_order, :show ]
+  before_action :redirect_for_verified, only: [ :verify_order, :verify ], unless: :poor_auth
   # GET /orders
   # GET /orders.json
   def index
+    sort_order = params["sort_order"] || 'ASC'
+    @sort_order = sort_order == 'ASC' ? 'DESC' : 'ASC'
+
+    @sort_by = params["sort_by"] || 'status_id'
     @title = "All Orders"
-    @orders = Order.all
+    
+    @statuses = Status.all.pluck(:name, :id)
+    @orders = Order.order("#{@sort_by} #{@sort_order}")
+    if params["table_only"] && params["table_only"] == "true"
+      render partial: 'index_table' and return
+    end
+  end
+
+  def redirect_for_verified
+    if order = Order.where(order_id: params["id"]).first
+      if order.status.name == "Ordered"
+        session[:my_pie_order] = order.order_id
+        redirect_to order_status_path, {notice: 'This order has been verified and can not be altered now.' } 
+      end
+    end
   end
 
   # GET /orders/1
@@ -17,15 +36,14 @@ class OrdersController < ApplicationController
 
   def status
     if params["order_id"]
-      temp_order = Order.where(order_id: params["order_id"]).first
-      if temp_order
-        @order_status = "Order id: #{temp_order.order_id}"
-        @order_status +=  "<br>Order Status: #{temp_order.status}"
-        @order_status += "<br>Last Updated: #{temp_order.updated_at}"
-      else
-        @order_status = "An order with the id #{params["order_id"]} was not found"
-      end
+      order = params["order_id"]
+    elsif session[:my_pie_order]
+      order = session[:my_pie_order]
     end
+    if order
+      @order = Order.where(order_id: order).first
+    end
+    @order = "An order with the id #{order} was not found<br>If an order was not verified I will delete it after a few days." unless @order
     @title = "Check order status"
   end
 
@@ -42,7 +60,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
-    @title = "Edit Order #{@order.order_id}"
+    @title = "#{@order.order_id}"
     @categories = {}
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
       @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
@@ -59,7 +77,7 @@ class OrdersController < ApplicationController
     @order = Order.where(order_id: params["order"]["order_id"]).first
     @order.status_id = Status.where(name: 'Ordered').first.id
     if @order.save
-      redirect_to @order, { notice: 'Order status has been updated. You will be contacted shortly.' }
+      redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
     else
       redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
     end
@@ -68,6 +86,11 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
+    if params["order"]["order_id"].present?
+      @title =  params["order"]["order_id"]
+    else
+      @title = "New Order"
+    end
     if @order = Order.where(order_id: params["order"]["order_id"]).first
       @order.total = params["order"]["total"].to_f
       @order.name = params["order"]["name"]
@@ -82,7 +105,8 @@ class OrdersController < ApplicationController
       if @order.save
         @order.order_items.destroy_all
         @order.order_items_builder(params["order"]["items"])
-        format.html { redirect_to verify_order_path(@order.order_id), notice: 'Please Verify the order and submit.' }
+        session[:my_pie_order] = @order.order_id
+        format.html { redirect_to verify_order_path(@order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
         @categories = {}
@@ -111,6 +135,17 @@ class OrdersController < ApplicationController
     end
   end
 
+  def update_orders
+    params["changed_orders"].split(',').each_slice(2) do |id,status_id|
+      if order = Order.where(order_id: id).first
+        order.status_id = status_id
+        order.save
+      end
+    end
+
+    render nothing: true
+  end
+
   # DELETE /orders/1
   # DELETE /orders/1.json
   def destroy
@@ -124,7 +159,7 @@ class OrdersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
-      @order = Order.find(params[:id])
+      @order = Order.where(order_id: params[:id]).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

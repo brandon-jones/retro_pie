@@ -1,10 +1,20 @@
 %div.container-fluid
   %div.row
-    %div.col-md-8.col-md-offset-2
-      -if @order_status
-        %pre
-          =@order_status.html_safe
+    %div.col-md-6.col-md-offset-3
+      -if @order
+        -unless @order.class.to_s == 'String'
+          %pre
+            ="Order ID: #{@order.order_id}<br>Order Status: #{@order.status}<br>Last Updated: #{local_time(@order.updated_at, '%B %e, %Y')}".html_safe
+          -if @order.status.name == 'Unsubmitted'
+            %h4.red
+              This order has NOT been submitted. Please click the link below to verify and submit. Once the order status is changed to Ordered I will contact you to begin building the system. If you get asked for a username and password the username is your email address and the password is the order id.
+            =link_to 'Verify Order', verify_order_path(@order.order_id), class: 'btn btn-default'
+        -else
+          %pre
+            =@order.html_safe
+
       = form_tag("/order_status", method: "get", class: "form") do
+        %br
         %div.form-group
           %p
             = label_tag(:order_id_label, "Order ID:")
@@ -12,8 +22,9 @@
         %div.form-group
           .actions
             = submit_tag("Check order status",class: 'btn btn-default')
-      Order status usually follow the follow progression:
-      %ul
+      %br
+      Order status usually follow the following progression:
+      %ol
         %li
           %strong
             Unsubmitted:

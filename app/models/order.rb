@@ -12,7 +12,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def status
-		 return Status.find(self.status_id).name
+		 return Status.find(self.status_id)
 	end
 
 	def set_defaults

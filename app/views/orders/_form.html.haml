@@ -30,7 +30,6 @@
   =hidden_field_tag :total_price, @order.total || $base_price, {id: 'clean-total', name: "order[total]"}
   =hidden_field_tag :order_id, @order.order_id || '', { name: "order[order_id]"}
   %h3.text-center#total-box
-    %span.shipping-cost
     Total
     %span.total
       =format_init_price
@@ -46,28 +45,28 @@
   .field.form-group{class: "#{any_errors('name')}"}
     = label_tag :name
     %br
-      = text_field_tag :name, nil, {class: "form-control", name: 'order[name]'}
+      = text_field_tag :name, @order.name || '', {class: "form-control", name: 'order[name]'}
   .field.form-group{class: "#{any_errors('email')}"}
     = label_tag :email
     %br
-      = email_field_tag :email, nil, {class: 'form-control', name: 'order[email]'}
+      = email_field_tag :email, @order.email || '', {class: 'form-control', name: 'order[email]'}
   .field.form-group{class: "#{any_errors('perferred_contact')}"}
     = label_tag :perferred_contact
     %br
-      = text_area_tag :perferred_contact, nil, {class: 'form-control', name: 'order[perferred_contact]'}
+      = text_area_tag :perferred_contact, @order.perferred_contact || '', {class: 'form-control', name: 'order[perferred_contact]'}
   .field.form-group{class: "#{any_errors('delivery_type')}"}
     = label_tag :delivery_type
     %br
-    = select_tag :delivery_type, options_for_select(@delivery_types), { class: 'form-control', selected: params["order"]["delivery_type"] || 'local_pickup', name: 'order[delivery_type]' }
+    = select_tag :delivery_type, options_for_select(@delivery_types,@order.delivery_type || 'local_pickup'), { class: 'form-control', name: 'order[delivery_type]' }
     %p
       You must come to me for it to be a local pickup
-  -d = params["order"]["delivery_type"] || 'local_pickup'
+  -d = @order.delivery_type  || 'local_pickup'
   -display = (d=='local_pickup') ? 'display:none' : 'display:block'
   #shipping{ style: "#{display}"}
     .field.form-group{class: "#{any_errors('shipping_info')}"}
       = label_tag :shipping_info
       %br
-        = text_area_tag :shipping_info, nil, {class: 'form-control', name: 'order[shipping_info]'}
+        = text_area_tag :shipping_info, @order.shipping_info || '', {class: 'form-control', name: 'order[shipping_info]'}
     .field.form-group
       = label_tag :shipping_price
       %br
@@ -75,6 +74,6 @@
   .field.form-group{class: "#{any_errors('special_instructions')}"}
     = label_tag :special_instructions
     %br
-      = text_area_tag :special_instructions, nil, {class: 'form-control', name: 'order[special_instructions]'}
+      = text_area_tag :special_instructions, @order.special_instructions || '', {class: 'form-control', name: 'order[special_instructions]'}
   .actions
     = submit_tag 'Verify Order'

@@ -18,7 +18,13 @@
   answer: You don’t. Well you can but to do so you hold the keys Alt + F4 on the keyboard. A command prompt should appear after about 10 seconds. Type “sudo power off”. This will shut down the device. If you just pull out the power cord you will eventually destroy the SD card.
 -
   question: How do I transfer the ROMs to my device
-  answer: If you bought a wifi dongle and gave me your wifi details I have put that in for you. Power on your device and it should connect to your network automatically. If not, you must plug the Pie into your network using a network cable. Once the device is powered on and on network you should see it in your network on any computer that is on the same network (and configured to see other computers on the network).
+  answer: Power on your device and it should connect to your network automatically. If not, you must plug the Pie into your network using a network cable. Once the device is powered on and on network you should see it in your network on any computer that is on the same network (and configured to see other computers on the network).
 -
   question: How do I power on my device
   answer: Plug it in
+-
+  question: I just got my device...what now?
+  answer: If I did everything correctly you should now plug in a keyboard, your controller(s), the hdmi cable, the network cable or wireless adapter, and then the power cord. In this order. The device should now powerup and you can start playing games after you transfer some over.
+-
+  question: What games can I play?
+  answer: This device does not come with games. But it has many emulators (the software to run the games) built in. This means all you have to do is download the games, transfer them over the network and then you can play.

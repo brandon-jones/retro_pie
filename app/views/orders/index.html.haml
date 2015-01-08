@@ -1,32 +1,9 @@
 %div.container-fluid
   %div.row
-    %div.col-md-8.col-md-offset-2
-      = link_to 'New Order', new_order_path
-      %table.table
-        %thead
-          %tr
-            %th Order ID
-            %th Name
-            %th Email
-            %th Perferred contact
-            %th Delivery type
-            %th Shipping price
-            %th Total Price
-            %th Status
-            %th
-            %th
-            %th
-        %tbody
-          - @orders.each do |order|
-            %tr
-              %td= order.order_id
-              %td= order.name
-              %td= order.email
-              %td= order.perferred_contact
-              %td= order.delivery_type.split('_').map{ |s| s.capitalize }.join(' ')
-              %td= order.shipping_price
-              %td= order.total
-              %td= order.status
-              %td= link_to 'Show', order
-              %td= link_to 'Edit', edit_order_path(order)
-              %td= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' }
+    %div.col-md-10.col-md-offset-1
+      %p{class: 'text-right save_order_button'}
+        %a{href: '#', class: 'btn btn-danger hidden', id: 'save_order_edits'}
+          Save
+      #order_table
+        =render partial: 'index_table'
+    %div.col-md-1

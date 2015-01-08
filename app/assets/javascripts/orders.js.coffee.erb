@@ -6,16 +6,31 @@ $ ->
 
   $(".price-changer").on "change", updateQuantity
 
+  $('.order-change').on "change", toggleChangedFlag
+
+  $('#save_order_edits').on "click", saveOrderChanges
+
+  $('.change_sort').on "click", changeSort
+
+changeSort = (event) ->
+  event.stopPropagation()
+  this.getAttribute('data')
+  $.get '/orders',
+      sort_by: this.getAttribute('data')
+      sort_order: $('#sort_order').val()
+      table_only: true
+      (data) -> 
+        $('#order_table').html(data)
+        $('.change_sort').on "click", changeSort
+
 scrapeData = (event) ->
   if $("#delivery_type").val() =='delivery'
     $('#shipping').show(300)
     $('#shipping_price').val("$<%= $shipping %>")
-    $('.shipping-cost').html('Shipping: + $<%=$shipping%><br>')
     updateQuantity()
   else
     $('#shipping_price').val('$0')
     $('#shipping').hide(300)
-    $('.shipping-cost').html('')
     updateQuantity()
   return
 
@@ -48,3 +63,31 @@ isRowActive = (row) ->
     return true
   else
     return false
+
+toggleChangedFlag = () ->
+  $('#order-index').addClass('unsaved-changes')
+  $(this).addClass('unsaved-changes-background')
+  if $('#save_order_edits').hasClass('hidden')
+    $('#save_order_edits').removeClass('hidden')
+
+saveOrderChanges = () ->
+  changedRows = []
+  $('.unsaved-changes-background').each (element) ->
+    $(this).removeClass('unsaved-changes-background')
+    parentElement = this.parentElement.parentElement
+    changedRows.push([parentElement.getElementsByClassName('order_id')[0].innerHTML, parentElement.getElementsByClassName('status_id')[0].value])
+  $('#save_order_edits').addClass('hidden')
+  $('#order-index').removeClass('unsaved-changes')
+  console.log("test")
+  console.log(changedRows)
+  if changedRows.length > 0
+    $.post '/orders/update',
+      changed_orders: changedRows.toString()
+      (data) -> 
+        $("#item_title").val(data.title)
+        $("#item_description").val(data.description)
+        $("#item_image_url").val(data.image_url)
+        $("#item_price").val(data.price)
+        $("#scrape-info").html(data.error)
+
+

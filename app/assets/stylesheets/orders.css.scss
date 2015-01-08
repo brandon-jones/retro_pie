@@ -33,3 +33,32 @@ td.title {
   padding: 2em .5em 2em .5em;
   border-radius: 10px;
 }
+
+.red {
+  color: red;
+}
+
+#order-index {
+  border-style: solid;
+  border-width: .2em;
+  border-radius: 10px;
+}
+
+table.table.unsaved-changes {
+  border-style: solid;
+  border-width: .2em;
+  border-color: red;
+  border-radius: 10px;
+}
+
+.unsaved-changes-background {
+  background-color: red;
+}
+
+.save_order_button {
+  min-height: 2.7em;
+}
+
+.order_id {
+  height: 2em;
+}

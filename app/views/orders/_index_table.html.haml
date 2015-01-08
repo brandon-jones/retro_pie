@@ -1,0 +1,47 @@
+=hidden_field_tag :sort_order, @sort_order, { id: 'sort_order' }
+=hidden_field_tag :sort_by, @sort_by, { id: 'sort_by' }
+%table.table#order-index
+  %thead
+    %tr
+      %th 
+        =caret('order_id').html_safe
+        %a{href: '#', class: 'change_sort', data: 'order_id'}
+          Order ID
+      %th 
+        =caret('name').html_safe
+        %a{href: '#', class: 'change_sort', data: 'name'}
+          Name
+      %th 
+        =caret('email').html_safe
+        %a{href: '#', class: 'change_sort', data: 'email'}
+          Email
+      %th 
+        =caret('perferred_contact').html_safe
+        %a{href: '#', class: 'change_sort', data: 'perferred_contact'}
+          Perferred contact
+      %th 
+        =caret('total').html_safe
+        %a{href: '#', class: 'change_sort', data: 'total'}
+          Total Price
+      %th 
+        =caret('status_id').html_safe
+        %a{href: '#', class: 'change_sort', data: 'status_id'}
+          Status
+      %th
+      %th
+      %th
+  %tbody
+    - @orders.each do |order|
+      %tr{class: 'order-row'}
+        %td{class: 'order_id'}= order.order_id
+        %td= order.name
+        %td= order.email
+        %td= order.perferred_contact
+        %td= '$' + '%.2f' % order.total
+        %td= select_tag :status, options_for_select(@statuses, order.status.id), {class: 'order-change status_id'}
+        %td= link_to 'Show', order_item_path(order.order_id), {class: 'btn btn-primary btn-xs'}
+        %td= link_to 'Edit', edit_order_path(order.order_id), {class: 'btn btn-warning btn-xs'}
+        %td= link_to 'Destroy', destory_order_path(order.order_id), method: :delete,class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure?' }
+      %tr{class: 'order-row'}
+        %td{colspan: "9"}
+          
