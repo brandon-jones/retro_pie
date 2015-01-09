@@ -1,7 +1,9 @@
 RetroPie::Application.routes.draw do
+
   resources :order_items
 
   resources :statuses
+  resources :users
 
   resources :items
 
