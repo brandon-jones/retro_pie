@@ -1,6 +1,6 @@
 =hidden_field_tag :sort_order, @sort_order, { id: 'sort_order' }
 =hidden_field_tag :sort_by, @sort_by, { id: 'sort_by' }
-%table.table#order-index
+%table.table#order-index.table-condensed
   %thead
     %tr
       %th 
@@ -38,10 +38,24 @@
         %td= order.email
         %td= order.perferred_contact
         %td= '$' + '%.2f' % order.total
-        %td= select_tag :status, options_for_select(@statuses, order.status.id), {class: 'order-change status_id'}
-        %td= link_to 'Show', order_item_path(order.order_id), {class: 'btn btn-primary btn-xs'}
+        %td= select_tag order.id, options_for_select(@statuses, order.status.id), {class: 'order-change status_id'}
+        %td
+          -if order.has_details?
+            = link_to 'Details', '#', {class: 'btn btn-primary btn-xs order-details', data: "#{order.order_id}"}
         %td= link_to 'Edit', edit_order_path(order.order_id), {class: 'btn btn-warning btn-xs'}
         %td= link_to 'Destroy', destory_order_path(order.order_id), method: :delete,class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure?' }
-      %tr{class: 'order-row'}
-        %td{colspan: "9"}
+      - if order.has_details?
+        %tr{id: "#{order.order_id}", style: "display:none", class: 'details-row'}
+          %td{colspan: "4"}
+            -if order.shipping_info.length > 0
+              %strong
+                Shipping Info
+              %br
+              = order.shipping_info
+          %td{colspan: "5"}
+            -if order.special_instructions.length > 0
+              %strong
+                Special Instructions
+              %br
+            = order.special_instructions
           

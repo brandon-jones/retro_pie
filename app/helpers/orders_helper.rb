@@ -3,9 +3,9 @@ module OrdersHelper
 	def caret(current)
 		if @sort_by == current
 			if @sort_order == 'ASC'
-				return '<i class="fa fa-caret-up"></i>'
-			else
 				return '<i class="fa fa-caret-down"></i>'
+			else
+				return '<i class="fa fa-caret-up"></i>'
 			end
 		end
 		return ''

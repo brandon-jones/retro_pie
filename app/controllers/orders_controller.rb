@@ -6,10 +6,10 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    sort_order = params["sort_order"] || 'ASC'
+    sort_order = params["sort_order"] || 'DESC'
     @sort_order = sort_order == 'ASC' ? 'DESC' : 'ASC'
 
-    @sort_by = params["sort_by"] || 'status_id'
+    @sort_by = params["sort_by"] || 'name'
     @title = "All Orders"
     
     @statuses = Status.all.pluck(:name, :id)
@@ -76,6 +76,7 @@ class OrdersController < ApplicationController
   def verify_order
     @order = Order.where(order_id: params["order"]["order_id"]).first
     @order.status_id = Status.where(name: 'Ordered').first.id
+    @order.cost = @order.calculate_cost
     if @order.save
       redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
     else
@@ -120,10 +121,19 @@ class OrdersController < ApplicationController
     end
   end
 
+  def stats
+    @title = 'Order Statistics'
+    # @orders = Order.all
+    # return_hash = {}
+    # @orders.each do |order|
+    #   order["items"] = order.calculate_cost
+      
+    # end
+  end
+
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    binding.pry
     respond_to do |format|
       if @order.update(order_params)
         format.html { redirect_to @order, notice: 'Order was successfully updated.' }
@@ -167,6 +177,6 @@ class OrdersController < ApplicationController
       puts '-'*80
       puts params
       puts '='*80
-      params.require(:order).permit(:total, :item_id, :item_price, :item_count, :status_id, :name, :email, :perferred_contact, :shipping_info, :delivery_type, :shipping_price, :order_id, :special_instructions, :items)
+      params.require(:order).permit(:total, :item_id, :item_price, :item_count, :status_id, :name, :email, :perferred_contact, :shipping_info, :delivery_type, :shipping_price, :order_id, :special_instructions, :items, :cost)
     end
 end

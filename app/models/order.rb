@@ -1,6 +1,7 @@
 class Order < ActiveRecord::Base
 	validates_presence_of :name, :email, :perferred_contact
 	validates_presence_of :shipping_info, unless: :local_shipping
+	attr_accessor :items
 	before_create :set_defaults
 	has_many :order_items
 
@@ -29,6 +30,26 @@ class Order < ActiveRecord::Base
 
 	end
 
+	def calculate_cost
+		return stats[1]
+	end
+
+	def stats
+		item_total = 0
+		item_cost = 0
+		self.order_items.each do |item|
+			item_total += item.item_price.to_f
+			item_cost += item.item_cost.to_f
+		end
+		return item_total, item_cost
+	end
+
+	def has_details?
+		return true if self.shipping_info.length > 0
+		return true if self.special_instructions.length > 0
+		return false
+	end
+
 	def ordered_items(category_items)
 		base_item = []
 		ordered_items = []
@@ -47,7 +68,7 @@ class Order < ActiveRecord::Base
 	def create_order_items(category_items)
 		category_items.each do |item|
 			db_item = Item.where(id: item["item_id"]).first
-			verify_price(item["price"],db_item.markup.gsub('$','').strip)
+			# verify_price(item["price"],db_item.markup.gsub('$','').strip)
 			if oi = OrderItem.where(order_id: self.id, item_id: item["item_id"]).first
 				oi.quantity = item["quantity"]
 			else

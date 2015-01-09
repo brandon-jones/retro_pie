@@ -62,3 +62,18 @@ table.table.unsaved-changes {
 .order_id {
   height: 2em;
 }
+
+.fade-out {
+  -webkit-transition: all 3s ease-in-out;
+  -moz-transition: all 3s ease-in-out;
+  -o-transition: all 3s ease-in-out;
+  transition: all 3s ease-in-out;
+}
+
+.flash-save {
+  background-color: green;
+}
+
+.details-row {
+  background-color: #e0e0e0;
+}

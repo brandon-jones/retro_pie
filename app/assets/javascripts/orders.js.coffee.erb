@@ -8,13 +8,25 @@ $ ->
 
   $('.order-change').on "change", toggleChangedFlag
 
-  $('#save_order_edits').on "click", saveOrderChanges
+  $('#save_order_edits').on "click", saveOrderEdits
 
   $('.change_sort').on "click", changeSort
 
+  $('.order-details').on "click", showOrderDetails
+
+showOrderDetails = (e)->
+  e.stopPropagation()
+  e.preventDefault()
+  details_id = "#"+this.getAttribute('data')
+  if $(details_id)[0].style.display == 'none'
+    $(details_id).show(200)
+  else
+    $(details_id).hide(200)
+  
 changeSort = (event) ->
   event.stopPropagation()
-  this.getAttribute('data')
+  event.preventDefault()
+  $('#save_order_edits').addClass('hidden')
   $.get '/orders',
       sort_by: this.getAttribute('data')
       sort_order: $('#sort_order').val()
@@ -22,6 +34,8 @@ changeSort = (event) ->
       (data) -> 
         $('#order_table').html(data)
         $('.change_sort').on "click", changeSort
+        $('.order-details').on "click", showOrderDetails
+        $('.order-change').on "change", toggleChangedFlag
 
 scrapeData = (event) ->
   if $("#delivery_type").val() =='delivery'
@@ -70,24 +84,30 @@ toggleChangedFlag = () ->
   if $('#save_order_edits').hasClass('hidden')
     $('#save_order_edits').removeClass('hidden')
 
-saveOrderChanges = () ->
+saveOrderEdits = () ->
   changedRows = []
   $('.unsaved-changes-background').each (element) ->
     $(this).removeClass('unsaved-changes-background')
+    $(this).closest(".order-row").addClass('flash-save')
+    delay 1, fadeOutGreen
     parentElement = this.parentElement.parentElement
     changedRows.push([parentElement.getElementsByClassName('order_id')[0].innerHTML, parentElement.getElementsByClassName('status_id')[0].value])
   $('#save_order_edits').addClass('hidden')
   $('#order-index').removeClass('unsaved-changes')
-  console.log("test")
-  console.log(changedRows)
   if changedRows.length > 0
     $.post '/orders/update',
       changed_orders: changedRows.toString()
       (data) -> 
-        $("#item_title").val(data.title)
-        $("#item_description").val(data.description)
-        $("#item_image_url").val(data.image_url)
-        $("#item_price").val(data.price)
-        $("#scrape-info").html(data.error)
+      
+fadeOutGreen = () ->
+  $('.flash-save').each (element) ->
+    $(this).removeClass('flash-save')
+    $(this).addClass('fade-out')
+    delay 5000, remove_updated_classes
 
+remove_updated_classes = () ->
+  console.log('remove_updated_classes')
+  $('.fade-out').each  (element) ->
+    $(this).removeClass('fade-out')
 
+delay = (ms, func) -> setTimeout func, ms

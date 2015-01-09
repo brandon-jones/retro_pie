@@ -73,7 +73,14 @@ div {
   }
 }
 
+a:visited { 
+    text-decoration: none;
+}
 
 #footer {
   min-height: 5em;
+}
+
+.inline-block {
+  display: inline-block;
 }

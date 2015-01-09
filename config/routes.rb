@@ -7,6 +7,8 @@ RetroPie::Application.routes.draw do
 
   delete '/order/:id', to: 'orders#destroy', as: :destory_order
 
+  get 'orders/stats', to: 'orders#stats'
+
   resources :orders
 
   resources :categories
@@ -26,6 +28,7 @@ RetroPie::Application.routes.draw do
   root 'static_pages#index'
 
   post 'orders/update', to: 'orders#update_orders'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

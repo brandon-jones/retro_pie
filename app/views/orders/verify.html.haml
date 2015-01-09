@@ -5,11 +5,13 @@
         Your Order is not complete! 
         %br
         Please verify below to complete your order
-      %h4
-        Please note. I will get the best items I can for the money. This means that the items in the pictures are used as representations. I will get you the best item I can that is aviabled.
       %p#notice= notice
       .items
         =build_receipt_table(@order.order_items).html_safe
+
+      %h4
+        Please note. I will get the best items I can for the money. This means that the items in the pictures are used as representations. I will get you the best item I can.
+      %br
       = form_tag("/verify_order", method: "post", class: "form") do
         =hidden_field_tag :order_id, @order.order_id, {name: "order[order_id]"}
         %p
