@@ -1,12 +1,12 @@
-%div.container-fluid
-  %div.row
-    %div.col-md-10.col-md-offset-1
-      %p{class: 'save_order_button block'}
-        %a{href: "#{orders_stats_path}", class: 'btn btn-default'}
-          Status
-      %p{class: 'pull-right save_order_button block'}
-        %a{href: '#', class: 'btn btn-danger hidden', id: 'save_order_edits'}
-          Save
-      #order_table
-        =render partial: 'index_table'
-    %div.col-md-1
+-@title = 'All Orders'
+%div.row
+  %div.col-md-10.col-md-offset-1
+    %p{class: 'save_order_button block'}
+      %a{href: "#{orders_stats_path}", class: 'btn btn-default'}
+        Status
+    %p{class: 'pull-right save_order_button block'}
+      %a{href: '#', class: 'btn btn-danger hidden', id: 'save_order_edits'}
+        Save
+    #order_table
+      =render partial: 'index_table'
+  %div.col-md-1

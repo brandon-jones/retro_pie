@@ -1,6 +1,6 @@
 class Order < ActiveRecord::Base
 	attr_accessor :items
-	before_create :set_defaults
+	after_initialize :set_defaults
 	has_many :order_items
 
 	def local_shipping
@@ -15,9 +15,9 @@ class Order < ActiveRecord::Base
 	end
 
 	def set_defaults
-		self.status_id = Status.all.where(name: 'Unsubmitted').first.id
-		self.order_id = SecureRandom.hex(10)
-		self.shipping_price = self.delivery_type == 'delivery' ? $shipping : 0
+		self.status_id = Status.all.where(name: 'Unsubmitted').first.id unless self.status_id
+		self.order_id = SecureRandom.hex(12) unless self.order_id
+		self.shipping_price = 0 unless self.shipping_price
 	end
 
 	def order_items_builder(user_items)

@@ -3,6 +3,8 @@ RetroPie::Application.routes.draw do
   resources :order_items
 
   resources :statuses
+
+  get 'users/new/:order_id', to: 'users#new', as: 'new_user'
   resources :users
 
   resources :items

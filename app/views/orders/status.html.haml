@@ -1,55 +1,54 @@
-%div.container-fluid
-  %div.row
-    %div.col-md-6.col-md-offset-3
-      -if @order
-        -unless @order.class.to_s == 'String'
-          %pre
-            ="Order ID: #{@order.order_id}<br>Order Status: #{@order.status}<br>Last Updated: #{local_time(@order.updated_at, '%B %e, %Y')}".html_safe
-          -if @order.status.name == 'Unsubmitted'
-            %h4.red
-              This order has NOT been submitted. Please click the link below to verify and submit. Once the order status is changed to Ordered I will contact you to begin building the system. If you get asked for a username and password the username is your email address and the password is the order id.
-            =link_to 'Verify Order', verify_order_path(@order.order_id), class: 'btn btn-default'
-        -else
-          %pre
-            =@order.html_safe
+%div.row
+  %div.col-md-6.col-md-offset-3
+    -if @order
+      -unless @order.class.to_s == 'String'
+        %pre
+          ="Order ID: #{@order.order_id}<br>Order Status: #{@order.status}<br>Last Updated: #{local_time(@order.updated_at, '%B %e, %Y')}".html_safe
+        -if @order.status.name == 'Unsubmitted'
+          %h4.red
+            This order has NOT been submitted. Please click the link below to verify and submit. Once the order status is changed to Ordered I will contact you to begin building the system. If you get asked for a username and password the username is your email address and the password is the order id.
+          =link_to 'Verify Order', verify_order_path(@order.order_id), class: 'btn btn-default'
+      -else
+        %pre
+          =@order.html_safe
 
-      = form_tag("/order_status", method: "get", class: "form") do
-        %br
-        %div.form-group
-          %p
-            = label_tag(:order_id_label, "Order ID:")
-          = text_field_tag(:order_id, nil, class: "form-control")
-        %div.form-group
-          .actions
-            = submit_tag("Check order status",class: 'btn btn-default')
+    = form_tag("/order_status", method: "get", class: "form") do
       %br
-      Order status usually follow the following progression:
-      %ol
-        %li
-          %strong
-            Unsubmitted:
-          You need to verify your order before I will contact you
-        %li
-          %strong
-            Ordered:
-          Waiting to be contact by me
-        %li
-          %strong
-            Verified:
-          You have been verified by me and payment has been arranged
-        %li
-          %strong
-            Waiting for Payment: 
-          Waiting to get payment
-        %li
-          %strong
-            Building:
-          I am building your device. should take no more than a day or two.
-        %li
-          %strong
-            Shipped:
-          I have shipped the Pie
-        %li
-          %strong
-            Closed:
-          Either I have not heard back from you or we have talked and I know you are happy.
+      %div.form-group
+        %p
+          = label_tag(:order_id_label, "Order ID:")
+        = text_field_tag(:order_id, nil, class: "form-control")
+      %div.form-group
+        .actions
+          = submit_tag("Check order status",class: 'btn btn-default')
+    %br
+    Order status usually follow the following progression:
+    %ol
+      %li
+        %strong
+          Unsubmitted:
+        You need to verify your order before I will contact you
+      %li
+        %strong
+          Ordered:
+        Waiting to be contact by me
+      %li
+        %strong
+          Verified:
+        You have been verified by me and payment has been arranged
+      %li
+        %strong
+          Waiting for Payment: 
+        Waiting to get payment
+      %li
+        %strong
+          Building:
+        I am building your device. should take no more than a day or two.
+      %li
+        %strong
+          Shipped:
+        I have shipped the Pie
+      %li
+        %strong
+          Closed:
+        Either I have not heard back from you or we have talked and I know you are happy.

@@ -22,13 +22,13 @@
               %td
                 %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
               %td{class: 'price'}
-                =hidden_field :actual_price, item.markup.gsub('$',''), {name: "order[items][#{item.category.name}][#{item.id}][price]"}
-                =hidden_field :base_item, item.base_item, {name: "order[items][#{item.category.name}][#{item.id}][base_item]"}
+                =f.hidden_field :actual_price, value: item.markup.gsub('$',''), name: "order[items][#{item.category.name}][#{item.id}][price]"
+                =f.hidden_field :base_item, value: item.base_item, name: "order[items][#{item.category.name}][#{item.id}][base_item]"
                 =figure_increase_cost(key,item.markup)
               %td
                 =quantity_selector(item).html_safe
-  =hidden_field :total_price, @order.total || $base_price, {id: 'clean-total', name: "order[total]"}
-  =hidden_field :order_id, @order.order_id || '', { name: "order[order_id]"}
+  =f.hidden_field :total_price, value: (@order.total || $base_price), id: 'clean-total', name: "order[total]"
+  =f.hidden_field :order_id, value: (@order.order_id || ''), name: "order[order_id]"
   %h3.text-center#total-box
     Total
     %span.total
@@ -43,4 +43,4 @@
         - @order.errors.full_messages.each do |msg|
           %li= msg
   .actions
-    = f.submit 'Shipping Information', class: 'btn btn-default'
+    = f.submit 'Delivery Information', class: 'btn btn-primary'

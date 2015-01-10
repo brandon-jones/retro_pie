@@ -2,7 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
-  $("#delivery_type").on "change", scrapeData
 
   $(".price-changer").on "change", updateQuantity
 
@@ -36,15 +35,6 @@ changeSort = (event) ->
         $('.change_sort').on "click", changeSort
         $('.order-details').on "click", showOrderDetails
         $('.order-change').on "change", toggleChangedFlag
-
-scrapeData = (event) ->
-  if $("#delivery_type").val() =='delivery'
-    $('#shipping').show(300,'linear')
-    $('#shipping_price').val("$<%= $shipping %>")
-  else
-    $('#shipping_price').val('$0')
-    $('#shipping').hide(300,'linear')
-  return
 
 updateQuantity = (event) ->
   total_price = <%= $base_price %>

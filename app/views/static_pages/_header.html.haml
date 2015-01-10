@@ -1,8 +1,6 @@
 #header.text-center
-	=link_to 'Home', root_path
-	|
-	=link_to 'Bake my Pie', new_order_path
-	|
-	=link_to 'Check Order Status', order_status_path
-	|
-	=link_to 'FAQ', faq_path
+	=link_to 'Home', root_path, class: 'btn btn-info'
+	=link_to 'Bake my Pie', new_order_path, class: 'btn btn-danger'
+	=link_to 'Check Order Status', order_status_path, class: 'btn btn-info'
+	=link_to 'Contact Me', '#', class: 'btn btn-info'
+	=link_to 'FAQ', faq_path, class: 'btn btn-info'

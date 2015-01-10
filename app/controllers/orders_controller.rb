@@ -1,8 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
   before_action :authenticate, except: [:new, :create, :status, :verify, :verify_order, :show]
-  before_action :poor_auth, only: [ :verify, :verify_order, :show ]
-  before_action :redirect_for_verified, only: [ :verify_order, :verify ], unless: :poor_auth
   # GET /orders
   # GET /orders.json
   def index
@@ -10,7 +8,6 @@ class OrdersController < ApplicationController
     @sort_order = sort_order == 'ASC' ? 'DESC' : 'ASC'
 
     @sort_by = params["sort_by"] || 'name'
-    @title = "All Orders"
     
     @statuses = Status.all.pluck(:name, :id)
     @orders = Order.order("#{@sort_by} #{@sort_order}")
@@ -19,14 +16,14 @@ class OrdersController < ApplicationController
     end
   end
 
-  def redirect_for_verified
-    if order = Order.where(order_id: params["id"]).first
-      if order.status.name == "Ordered"
-        session[:my_pie_order] = order.order_id
-        redirect_to order_status_path, {notice: 'This order has been verified and can not be altered now.' } 
-      end
-    end
-  end
+  # def redirect_for_verified
+  #   if order = Order.where(order_id: params["id"]).first
+  #     if order.status.name == "Ordered"
+  #       session[:my_pie_order] = order.order_id
+  #       redirect_to order_status_path, {notice: 'This order has been verified and can not be altered now.' } 
+  #     end
+  #   end
+  # end
 
   # GET /orders/1
   # GET /orders/1.json
@@ -49,7 +46,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    @title = "New Order"
+    @title = "Build Order"
     @order = Order.new
     @categories = {}
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
@@ -87,27 +84,24 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
+
     if params["order"]["order_id"].present?
-      @title =  params["order"]["order_id"]
-    else
-      @title = "New Order"
-    end
-    if @order = Order.where(order_id: params["order"]["order_id"]).first
-      @order.total = params["order"]["total"].to_f
-      @order.name = params["order"]["name"]
-      @order.email = params["order"]["email"]
-      @order.perferred_contact = params["order"]["perferred_contact"]
-      @order.delivery_type = params["order"]["delivery_type"]
-      @order.shipping_info = params["order"]["shipping_info"]
-      @order.special_instructions = params["order"]["special_instructions"]
+      #   @title =  params["order"]["order_id"]
+      # else
+      #   @title = "New Order"
+      # end
+      if @order = Order.where(order_id: params["order"]["order_id"]).first
+        @order.total = params["order"]["total"].to_f
+        @order.order_items.destroy_all
+      end
     end
     @order = Order.new(order_params) unless @order
     respond_to do |format|
       if @order.save
-        @order.order_items.destroy_all
         @order.order_items_builder(params["order"]["items"])
-        session[:my_pie_order] = @order.order_id
-        format.html { redirect_to verify_order_path(@order.order_id) }
+        @order.cost = @order.calculate_cost
+        @order.save
+        format.html { redirect_to new_user_path(@order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
         @categories = {}
@@ -177,6 +171,6 @@ class OrdersController < ApplicationController
       puts '-'*80
       puts params
       puts '='*80
-      params.require(:order).permit(:total, :item_id, :item_price, :item_count, :status_id, :name, :email, :perferred_contact, :shipping_info, :delivery_type, :shipping_price, :order_id, :special_instructions, :items, :cost)
+      params.require(:order).permit(:status_id, :shipping_price, :order_id, :special_instructions, :total, :delivery_type, :cost)
     end
 end

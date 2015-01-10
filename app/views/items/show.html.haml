@@ -1,43 +1,42 @@
-%div.container-fluid
-  %div.row
-    %div.col-md-8.col-md-offset-2
-      %p#notice= notice
-      %p
-        %strong Title:
-        = @item.title
-      %p
-        %strong title locked:
-        = @item.title_locked
-      %p
-        %strong Description:
-        %br
-        = @item.description.gsub("\n",'<br>').html_safe
-      %p
-        %strong description locked:
-        = @item.description_locked
-      %p
-        %strong Amazon url:
-        = @item.amazon_url
-      %p
-        %strong Image url:
-        = @item.image_url
-      %p
-        %img{:alt => "#{@item.title}", :src => "#{@item.image_url}", :style => "width:304px;height:228px"}/
-      %p
-        %strong image url locked:
-        = @item.image_url_locked
-      %p
-        %strong Price:
-        $#{@item.price}
-      %p
-        %strong Markup:
-        = @item.markup
-      %p
-        %strong Base item:
-        = @item.base_item
-      %p
-        %strong Category:
-        = @item.category.name
-      = link_to 'Edit', edit_item_path(@item)
-      |
-      \#{link_to 'Back', items_path}
+%div.row
+  %div.col-md-8.col-md-offset-2
+    %p#notice= notice
+    %p
+      %strong Title:
+      = @item.title
+    %p
+      %strong title locked:
+      = @item.title_locked
+    %p
+      %strong Description:
+      %br
+      = @item.description.gsub("\n",'<br>').html_safe
+    %p
+      %strong description locked:
+      = @item.description_locked
+    %p
+      %strong Amazon url:
+      = @item.amazon_url
+    %p
+      %strong Image url:
+      = @item.image_url
+    %p
+      %img{:alt => "#{@item.title}", :src => "#{@item.image_url}", :style => "width:304px;height:228px"}/
+    %p
+      %strong image url locked:
+      = @item.image_url_locked
+    %p
+      %strong Price:
+      $#{@item.price}
+    %p
+      %strong Markup:
+      = @item.markup
+    %p
+      %strong Base item:
+      = @item.base_item
+    %p
+      %strong Category:
+      = @item.category.name
+    = link_to 'Edit', edit_item_path(@item)
+    |
+    \#{link_to 'Back', items_path}
