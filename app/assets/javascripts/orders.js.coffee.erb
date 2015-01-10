@@ -19,9 +19,9 @@ showOrderDetails = (e)->
   e.preventDefault()
   details_id = "#"+this.getAttribute('data')
   if $(details_id)[0].style.display == 'none'
-    $(details_id).show(200)
+    $(details_id).show(200,'linear')
   else
-    $(details_id).hide(200)
+    $(details_id).hide(200,'linear')
   
 changeSort = (event) ->
   event.stopPropagation()
@@ -39,13 +39,11 @@ changeSort = (event) ->
 
 scrapeData = (event) ->
   if $("#delivery_type").val() =='delivery'
-    $('#shipping').show(300)
+    $('#shipping').show(300,'linear')
     $('#shipping_price').val("$<%= $shipping %>")
-    updateQuantity()
   else
     $('#shipping_price').val('$0')
-    $('#shipping').hide(300)
-    updateQuantity()
+    $('#shipping').hide(300,'linear')
   return
 
 updateQuantity = (event) ->

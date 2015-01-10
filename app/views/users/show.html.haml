@@ -1,0 +1,28 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @user.name
+%p
+  %strong Email:
+  = @user.email
+%p
+  %strong Phone:
+  = @user.phone
+%p
+  %strong Apt number:
+  = @user.apt_number
+%p
+  %strong Street:
+  = @user.street
+%p
+  %strong City:
+  = @user.city
+%p
+  %strong State:
+  = @user.state
+%p
+  %strong Zip code:
+  = @user.zip_code
+= link_to 'Edit', edit_user_path(@user)
+|
+\#{link_to 'Back', users_path}

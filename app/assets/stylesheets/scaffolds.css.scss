@@ -37,6 +37,13 @@ a {
   }
 }
 
+.tab-content {
+  width: 80%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 1em;
+}
+
 div {
   &.field, &.actions {
     margin-bottom: 10px;
@@ -48,7 +55,6 @@ div {
 }
 
 .field_with_errors {
-  padding: 2px;
   background-color: red;
 }
 

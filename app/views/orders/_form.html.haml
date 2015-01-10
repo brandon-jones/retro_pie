@@ -1,6 +1,6 @@
 - params["order"] = {} unless params["order"]
 - order = Hash.new
-= form_tag("/orders", method: "post", class: "form") do
+= form_for(@order) do |f|
   -@categories.keys.each do |key|
     - if @categories[key].count > 0
       .p  
@@ -22,13 +22,13 @@
               %td
                 %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
               %td{class: 'price'}
-                =hidden_field_tag :actual_price, item.markup.gsub('$',''), {name: "order[items][#{item.category.name}][#{item.id}][price]"}
-                =hidden_field_tag :base_item, item.base_item, {name: "order[items][#{item.category.name}][#{item.id}][base_item]"}
+                =hidden_field :actual_price, item.markup.gsub('$',''), {name: "order[items][#{item.category.name}][#{item.id}][price]"}
+                =hidden_field :base_item, item.base_item, {name: "order[items][#{item.category.name}][#{item.id}][base_item]"}
                 =figure_increase_cost(key,item.markup)
               %td
                 =quantity_selector(item).html_safe
-  =hidden_field_tag :total_price, @order.total || $base_price, {id: 'clean-total', name: "order[total]"}
-  =hidden_field_tag :order_id, @order.order_id || '', { name: "order[order_id]"}
+  =hidden_field :total_price, @order.total || $base_price, {id: 'clean-total', name: "order[total]"}
+  =hidden_field :order_id, @order.order_id || '', { name: "order[order_id]"}
   %h3.text-center#total-box
     Total
     %span.total
@@ -42,38 +42,5 @@
       %ul
         - @order.errors.full_messages.each do |msg|
           %li= msg
-  .field.form-group{class: "#{any_errors('name')}"}
-    = label_tag :name
-    %br
-      = text_field_tag :name, @order.name || '', {class: "form-control", name: 'order[name]'}
-  .field.form-group{class: "#{any_errors('email')}"}
-    = label_tag :email
-    %br
-      = email_field_tag :email, @order.email || '', {class: 'form-control', name: 'order[email]'}
-  .field.form-group{class: "#{any_errors('perferred_contact')}"}
-    = label_tag :perferred_contact
-    %br
-      = text_area_tag :perferred_contact, @order.perferred_contact || '', {class: 'form-control', name: 'order[perferred_contact]'}
-  .field.form-group{class: "#{any_errors('delivery_type')}"}
-    = label_tag :delivery_type
-    %br
-    = select_tag :delivery_type, options_for_select(@delivery_types,@order.delivery_type || 'local_pickup'), { class: 'form-control', name: 'order[delivery_type]' }
-    %p
-      You must come to me for it to be a local pickup
-  -d = @order.delivery_type  || 'local_pickup'
-  -display = (d=='local_pickup') ? 'display:none' : 'display:block'
-  #shipping{ style: "#{display}"}
-    .field.form-group{class: "#{any_errors('shipping_info')}"}
-      = label_tag :shipping_info
-      %br
-        = text_area_tag :shipping_info, @order.shipping_info || '', {class: 'form-control', name: 'order[shipping_info]'}
-    .field.form-group
-      = label_tag :shipping_price
-      %br
-        = text_field_tag :shipping_price, (params["order"]["delivery_type"]=='delivery' ? "$"+$shipping.to_s : '0') , {class: 'form-control', disabled: true, name: 'order[shipping_price]' }
-  .field.form-group{class: "#{any_errors('special_instructions')}"}
-    = label_tag :special_instructions
-    %br
-      = text_area_tag :special_instructions, @order.special_instructions || '', {class: 'form-control', name: 'order[special_instructions]'}
   .actions
-    = submit_tag 'Verify Order'
+    = f.submit 'Shipping Information', class: 'btn btn-default'

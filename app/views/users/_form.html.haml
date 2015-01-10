@@ -1,0 +1,57 @@
+= form_for(@user, :html =>{ class: 'form-horizontal' }) do |f|
+  .form-group
+    = f.label :name
+    = f.text_field :name, class: 'form-control'
+  .form-group
+    = f.label :email
+    = f.text_field :email, class: 'form-control'
+  You will only use this password to check the status of the order on the web. With the order ID I will email you an update on the status without a password.
+  .form-group
+    = f.label :password
+    = f.password_field :password, class: 'form-control'
+  .form-group
+    = f.label :password_confirmation
+    = f.password_field :password_confirmation, class: 'form-control'
+    = f.label :phone
+    = f.text_field :phone, class: 'form-control'
+  .form-group
+    = label_tag :delivery_type_label, 'Delivery Type', for: :delivery_type
+    = select_tag :delivery_type, options_for_select([['Pickup','pickup'],['Delivery','delivery']]), class: 'form-control'
+    = hidden_field_tag :order_id 
+  #shipping{ style: 'display:none'}
+    %div.row
+      %div.col-md-2
+        %div.row
+          %div.col-md-11
+            .form-group
+              = f.label :apt_number, 'Apt #'
+              = f.text_field :apt_number, class: 'form-control'
+      %div.col-md-10
+        .form-group
+          = f.label :street
+          = f.text_field :street, class: 'form-control'
+    %div.row
+      %div.col-md-6
+        .form-group
+          = f.label :city
+          = f.text_field :city, class: 'form-control'
+      %div.col-md-2
+        %div.row
+          %div.col-md-10.col-md-offset-1
+            .form-group
+              = f.label :state
+              = f.select :state, options_for_select(@state_abreviations, 'CA'), {}, class: 'form-control'
+      %div.col-md-4
+        .form-group
+          = f.label :zip_code
+          = f.text_field :zip_code, class: 'form-control'
+  - if @user.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@user.errors.count, "error")
+        prohibited this user from being saved:
+      %ul
+        - @user.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group
+    = f.submit class: 'btn btn-default'

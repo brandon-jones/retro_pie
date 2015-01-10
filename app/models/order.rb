@@ -1,6 +1,4 @@
 class Order < ActiveRecord::Base
-	validates_presence_of :name, :email, :perferred_contact
-	validates_presence_of :shipping_info, unless: :local_shipping
 	attr_accessor :items
 	before_create :set_defaults
 	has_many :order_items
@@ -18,7 +16,7 @@ class Order < ActiveRecord::Base
 
 	def set_defaults
 		self.status_id = Status.all.where(name: 'Unsubmitted').first.id
-		self.order_id = self.name.gsub(' ','') + "-" + SecureRandom.hex(8)
+		self.order_id = SecureRandom.hex(10)
 		self.shipping_price = self.delivery_type == 'delivery' ? $shipping : 0
 	end
 

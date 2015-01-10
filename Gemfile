@@ -31,6 +31,8 @@ gem 'rest-client', '~> 1.7.2'
 
 gem 'local_time', '~> 1.0.0'
 
+gem 'bcrypt', '~> 3.1.9'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -53,7 +55,6 @@ group :development do
   gem 'awesome_print', '~> 1.2.0'
   gem 'better_errors', '~> 1.1.0'
   gem 'binding_of_caller', '~> 0.7.2'
-  gem 'awesome_print', '~> 1.2.0'
 end
 
 # Use ActiveModel has_secure_password
