@@ -43,7 +43,6 @@ updateQuantity = (event) ->
       quantity = getQuantity(this)
       price = getPrice(this, quantity)
       total_price =  parseInt(total_price) + parseInt(price)
-  total_price = total_price + parseInt($('#shipping_price').val().replace('$',''))
   $('.total').text("$"+total_price)
   $('#clean-total').val(total_price)
 

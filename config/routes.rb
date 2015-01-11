@@ -21,9 +21,7 @@ RetroPie::Application.routes.draw do
 
   get 'order_status', to: 'orders#status'
 
-  get 'verify_order/:id', to: 'orders#verify', as: :verify_order
-
-  post 'verify_order', to: 'orders#verify_order'
+  get 'verify_order/:id', to: 'users#verify', as: :verify_order
 
   get 'faq', to: 'static_pages#faq'
 

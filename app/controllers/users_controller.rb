@@ -20,24 +20,30 @@ class UsersController < ApplicationController
   end
 
   # GET /users/1/edit
-  def edit
+  def edit        
+    @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
+
+  end
+
+  def verify
+    @order = Order.where(order_id: params["id"]).first
+    @user = User.find_by_id(params["user_id"])
   end
 
   # POST /users
   # POST /users.json
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
-        format.html { redirect_to new_order_path, notice: 'User was successfully created.' }
+        @order = Order.find_by_order_id(params["order_id"])
+        @order.delivery_type = params["delivery_type"]
+        @order.shipping_price = $shipping unless @order.shipping_price || @order.delivery_type == 'pickup'
+        @order.save
+        format.html { redirect_to verify_order_path(params["order_id"], user_id: @user.id)}
         format.json { render action: 'show', status: :created, location: @user }
       else
         @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
-        puts "-"*80
-        puts params
-        puts '='*80
-        binding.pry
         @order = Order.find_by_order_id(params["order_id"])
         format.html { render action: 'new' }
         format.json { render json: @user.errors, status: :unprocessable_entity }

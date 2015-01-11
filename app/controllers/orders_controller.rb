@@ -62,24 +62,26 @@ class OrdersController < ApplicationController
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
       @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
     end
-    @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
+    # @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
   end
 
   def verify
     @order = Order.where(order_id: params["id"]).first
-    @title = "#{@order.order_id}"
+    @user = User.find_by_id(params["user_id"])
   end
 
-  def verify_order
-    @order = Order.where(order_id: params["order"]["order_id"]).first
-    @order.status_id = Status.where(name: 'Ordered').first.id
-    @order.cost = @order.calculate_cost
-    if @order.save
-      redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
-    else
-      redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
-    end
-  end
+  # def verify_order
+  #   @order = Order.where(order_id: params["id"]).first
+  #   @user = User.find_by_id(params["OrderId"])
+    # @order = Order.where(order_id: params["order"]["order_id"]).first
+    # @order.status_id = Status.where(name: 'Ordered').first.id
+    # @order.cost = @order.calculate_cost
+    # if @order.save
+    #   redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
+    # else
+    #   redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
+    # end
+  # end
 
   # POST /orders
   # POST /orders.json
@@ -108,7 +110,7 @@ class OrdersController < ApplicationController
         Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
           @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
         end
-        @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
+        # @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
         format.html { render action: 'new' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end

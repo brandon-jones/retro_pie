@@ -1,49 +1,45 @@
 = form_for(@user, html: {class: 'form-horizontal'}) do |f|
-  .form-group
+  .form-group.form-group-sm
     = f.label :name
     = f.text_field :name, class: 'form-control'
-  .form-group
+  .form-group.form-group-sm
     = f.label :email
-    = f.text_field :email, class: 'form-control'
-  You will only use this password to check the status of the order on the web. With the order ID I will email you an update on the status without a password.
-  .form-group
-    = f.label :password
-    = f.password_field :password, class: 'form-control'
-  .form-group
-    = f.label :password_confirmation
-    = f.password_field :password_confirmation, class: 'form-control'
-  .form-group
+    = f.text_field :email, class: 'form-control input-sm'
+  .form-group.form-group-sm
     = f.label :phone
     = f.text_field :phone, class: 'form-control'
-  .form-group
+  .form-group.form-group-sm
     = f.label :delivery_type, 'Delivery Type'
-    = f.select :delivery_type, options_for_select([['Pickup','pickup'],['Delivery','delivery']]), {}, class: 'form-control', id: 'select-delivery-type'
-    = f.hidden_field :order_id, value: @order.order_id, name: "order_id"
+    %small
+      You must come to me for it to be local
+    = f.select :delivery_type, options_for_select([['Pickup','pickup'],['Delivery','delivery']]), {}, class: 'form-control', id: 'select-delivery-type', name: 'delivery_type'
+    -if @order
+      = f.hidden_field :order_id, value: @order.order_id, name: "order_id"
   #shipping{ style: 'display:none'}
     %div.row
       %div.col-xs-2
         %div.row
           %div.col-xs-11
-            .form-group
+            .form-group.form-group-sm
               = f.label :apt_number, 'Apt #'
               = f.text_field :apt_number, class: 'form-control'
       %div.col-xs-10
-        .form-group
+        .form-group.form-group-sm
           = f.label :street
           = f.text_field :street, class: 'form-control'
     %div.row
       %div.col-xs-6
-        .form-group
+        .form-group.form-group-sm
           = f.label :city
           = f.text_field :city, class: 'form-control'
       %div.col-xs-2
         %div.row
           %div.col-xs-10.col-xs-offset-1
-            .form-group
+            .form-group.form-group-sm
               = f.label :state
               = f.select :state, options_for_select(@state_abreviations, 'CA'), {}, class: 'form-control'
       %div.col-xs-4
-        .form-group
+        .form-group.form-group-sm
           = f.label :zip_code
           = f.text_field :zip_code, class: 'form-control'
   - if @user.errors.any?
@@ -54,5 +50,5 @@
       %ul
         - @user.errors.full_messages.each do |msg|
           %li= msg
-  .form-group
-    = f.submit 'Review Order', class: 'btn btn-default'
+  .form-group.form-group-sm
+    = f.submit 'Review Order', class: 'btn btn-primary'
