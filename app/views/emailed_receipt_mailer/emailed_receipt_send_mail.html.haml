@@ -1,0 +1,10 @@
+%h2
+  Hello #{@user.name} here is your receipt/updated status
+%hr
+= render partial: 'users/verify'
+- @user.orders.each do |order|
+  Status
+  %h3 =@order.status.name
+  = render partial: 'orders/verify', locals: { order: order }
+  - order.payments.each do |payment|
+    = render partial: 'payments/verify', locals: {payment: payment}

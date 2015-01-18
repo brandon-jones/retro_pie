@@ -1,0 +1,7 @@
+-@title = "Payment Information"
+%div.row
+  %div.col-md-6.col-md-offset-3
+    %h2
+      Payment
+    = render partial: 'form'
+    = link_to 'Back', edit_user_path(param('user_id'), order_id: param('order_id'), payment_id: param('payment_id')), class: 'btn btn-default btn-xs'

@@ -1,0 +1,26 @@
+Hello #{@user.name} here is your receipt/order update information.
+
+Shipping information
+- @user.attributes.each do |name, value|
+  - unless ['created_at', 'updated_at', 'id'].include?(name)
+    - if name.present?
+      = name
+      \: #{value}
+Order
+- @user.orders.each do |order|
+  - order.attributes.each do |name, value|
+    - unless ['created_at', 'updated_at', 'id', 'total', 'cost'].include?(name)
+      = name
+      \: #{value}
+      - order.order_items.each do |order_item|
+        - order_item.item.attributes.each do |name2, value2|
+          \%>
+          - if ['title', 'description', 'price'].include?(name2)
+            = name2
+            \: #{value2}
+    Payment information
+    - order.payments.each do |payment|
+      -payment.attributes.each do |name, value|
+        - unless ['order_id'].include?(name)
+          = name
+          \: #{value}

@@ -1,7 +1,9 @@
 class Order < ActiveRecord::Base
 	attr_accessor :items
 	after_initialize :set_defaults
-	has_many :order_items
+	has_many :order_items, dependent: :destroy
+	has_many :payments
+	belongs_to :user
 
 	def local_shipping
 		if self.delivery_type && self.delivery_type.present?

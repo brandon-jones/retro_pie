@@ -1,0 +1,27 @@
+%p
+  %strong Name:
+  = @user.name
+%p
+  %strong Email:
+  = @user.email
+%p
+  %strong Phone:
+  = @user.phone
+- if @user.street.present?
+  %p
+    %strong Apt number:
+    = @user.apt_number
+  %p
+    %strong Street:
+    = @user.street
+  %p
+    %strong City:
+    = @user.city
+  %p
+    %strong State:
+    = @user.state
+  %p
+    %strong Zip code:
+    = @user.zip_code
+- unless @receipt.present? && @receipt
+  =link_to 'Edit Shipping Information', edit_user_path(param("user_id"), order_id: param('order_id'), payment_id: param('payment_id')), class: 'btn btn-default btn-sm black'

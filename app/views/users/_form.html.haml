@@ -4,7 +4,7 @@
     = f.text_field :name, class: 'form-control'
   .form-group.form-group-sm
     = f.label :email
-    = f.text_field :email, class: 'form-control input-sm'
+    = f.email_field :email, class: 'form-control input-sm'
   .form-group.form-group-sm
     = f.label :phone
     = f.text_field :phone, class: 'form-control'
@@ -51,4 +51,4 @@
         - @user.errors.full_messages.each do |msg|
           %li= msg
   .form-group.form-group-sm
-    = f.submit 'Review Order', class: 'btn btn-primary'
+    = f.submit 'Payment Information', class: 'btn btn-primary'

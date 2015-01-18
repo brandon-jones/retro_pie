@@ -44,6 +44,10 @@ td.title {
   border-radius: 10px;
 }
 
+.item-quantity {
+  width: 1%;
+}
+
 table.table.unsaved-changes {
   border-style: solid;
   border-width: .2em;
@@ -61,6 +65,10 @@ table.table.unsaved-changes {
 
 .order_id {
   height: 2em;
+}
+
+.item-total {
+  width: 14%;
 }
 
 .fade-out {

@@ -1,52 +1,44 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, except: [:new, :create, :status, :verify, :verify_order, :show]
+  before_action :authenticate, only: [:index]
+  before_action :session_auth, only: [:edit, :update, :show]
   # GET /orders
   # GET /orders.json
   def index
     sort_order = params["sort_order"] || 'DESC'
     @sort_order = sort_order == 'ASC' ? 'DESC' : 'ASC'
 
-    @sort_by = params["sort_by"] || 'name'
+    # @sort_by = params["sort_by"] || 'name'
     
     @statuses = Status.all.pluck(:name, :id)
-    @orders = Order.order("#{@sort_by} #{@sort_order}")
+    # @orders = Order.order("#{@sort_by} #{@sort_order}")
+    @orders = Order.all
     if params["table_only"] && params["table_only"] == "true"
       render partial: 'index_table' and return
     end
   end
 
-  # def redirect_for_verified
-  #   if order = Order.where(order_id: params["id"]).first
-  #     if order.status.name == "Ordered"
-  #       session[:my_pie_order] = order.order_id
-  #       redirect_to order_status_path, {notice: 'This order has been verified and can not be altered now.' } 
-  #     end
-  #   end
-  # end
-
   # GET /orders/1
   # GET /orders/1.json
   def show
-    @title = @order.order_id
+    
   end
 
   def status
-    if params["order_id"]
-      order = params["order_id"]
-    elsif session[:my_pie_order]
-      order = session[:my_pie_order]
-    end
-    if order
-      @order = Order.where(order_id: order).first
-    end
-    @order = "An order with the id #{order} was not found<br>If an order was not verified I will delete it after a few days." unless @order
-    @title = "Check order status"
+    # if params["order_id"]
+    #   order = params["order_id"]
+    # elsif session[:my_pie_order]
+    #   order = session[:my_pie_order]
+    # end
+    # if order
+    #   @order = Order.where(order_id: order).first
+    # end
+    # @order = "An order with the id #{order} was not found<br>If an order was not verified I will delete it after a few days." unless @order
+    # @title = "Check order status"
   end
 
   # GET /orders/new
   def new
-    @title = "Build Order"
     @order = Order.new
     @categories = {}
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
@@ -57,7 +49,9 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
-    @title = "#{@order.order_id}"
+    @order = Order.where(order_id: params["id"]).first
+    @user = User.find_by_id(params["user_id"])
+    @payment = Payment.find_by_id(params["payment_id"])
     @categories = {}
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
       @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
@@ -68,20 +62,31 @@ class OrdersController < ApplicationController
   def verify
     @order = Order.where(order_id: params["id"]).first
     @user = User.find_by_id(params["user_id"])
+    @payment = Payment.where(id: params["payment_id"]).first
+    if params["commit"]
+      @order.status_id = Status.find_by_name('Ordered')
+      if @order.save
+        EmailedReceiptMailer.emailed_receipt_send_mail(@user).deliver
+        redirect_to appreciation_orders_path, { notice: 'Order status has been updated. You will be contacted shortly.' }
+      else
+        redirect_to verify_order_path(params["id"], user_id: params["user_id"], payment_id: params["payment_id"]), {notice: 'Some error prevented updating the information.' }
+      end
+    end
   end
 
-  # def verify_order
-  #   @order = Order.where(order_id: params["id"]).first
-  #   @user = User.find_by_id(params["OrderId"])
-    # @order = Order.where(order_id: params["order"]["order_id"]).first
-    # @order.status_id = Status.where(name: 'Ordered').first.id
-    # @order.cost = @order.calculate_cost
-    # if @order.save
-    #   redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
-    # else
-    #   redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
-    # end
-  # end
+  def submit_order
+    binding.prty
+    @order = Order.where(order_id: params["id"]).first
+    @user = User.find_by_id(params["OrderId"])
+    @order = Order.where(order_id: params["order"]["order_id"]).first
+    @order.status_id = Status.find_by_name('Ordered')
+    @order.cost = @order.calculate_cost
+    if @order.save
+      redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
+    else
+      redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
+    end
+  end
 
   # POST /orders
   # POST /orders.json
@@ -103,7 +108,8 @@ class OrdersController < ApplicationController
         @order.order_items_builder(params["order"]["items"])
         @order.cost = @order.calculate_cost
         @order.save
-        format.html { redirect_to new_user_path(@order.order_id) }
+        session[:_bmp_order_id] = @order.order_id
+        format.html { redirect_to new_user_path(order_id: @order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
         @categories = {}
@@ -118,7 +124,6 @@ class OrdersController < ApplicationController
   end
 
   def stats
-    @title = 'Order Statistics'
     # @orders = Order.all
     # return_hash = {}
     # @orders.each do |order|
@@ -130,9 +135,13 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
+    @order = Order.find_by_order_id(params["order"]["order_id"])
     respond_to do |format|
       if @order.update(order_params)
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
+        @order.order_items_builder(params["order"]["items"])
+        @order.cost = @order.calculate_cost
+        @order.save
+        format.html { redirect_to verify_order_path(@order.order_id, user_id: param("user_id"), payment_id: param('payment_id') ) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

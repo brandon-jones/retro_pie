@@ -43,4 +43,5 @@
         - @order.errors.full_messages.each do |msg|
           %li= msg
   .actions
-    = f.submit 'Delivery Information', class: 'btn btn-primary'
+    - buttn_txt = params["action"] == 'edit' ? 'Update Order' : 'Delivery Information'
+    = f.submit buttn_txt, class: 'btn btn-primary'

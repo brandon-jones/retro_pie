@@ -26,14 +26,8 @@ pre {
   font-size: 11px;
 }
 
-a {
-  color: #ffffff;
-  &:visited {
-    color: #ffffff;
-  }
-  &:hover {
-    background-color: #ffffff;
-  }
+.black {
+  color: black;
 }
 
 .tab-content {
@@ -47,6 +41,10 @@ div {
   &.field, &.actions {
     margin-bottom: 10px;
   }
+}
+
+.black {
+  color: black;
 }
 
 #notice {

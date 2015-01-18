@@ -1,0 +1,24 @@
+= form_for(@payment, html: {class: 'form-horizontal'}) do |f|
+  - if @payment.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@payment.errors.count, "error")
+        prohibited this payment from being saved:
+      %ul
+        - @payment.errors.full_messages.each do |msg|
+          %li= msg
+  .form-group.form-group-sm
+    = f.label :amount, 'Amount Owed'
+    :escaped
+      -
+    = f.label :amount, "$#{'%.0f' % @order.total}"
+    %br
+    = f.label :amount, 'Order ID'
+    = f.label :order_id, "$#{@order.order_id}", name: "payment[order_id]"
+    
+    = f.hidden_field :user_id, value: @user.id, name: "payment[user_id]"
+    = f.hidden_field :order_id, value: @order.id, name: "payment[order_id]"
+    = f.hidden_field :order_order_id, value: @order.order_id, name: "payment[order_order_id]"
+    = f.hidden_field :amount, value: @order.total, name: "payment[amount]"
+  .form-group.form-group-sm
+    = f.submit 'Verify Information', class: 'btn btn-primary'

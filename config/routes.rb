@@ -1,35 +1,59 @@
 RetroPie::Application.routes.draw do
 
+  resources :payments
+
   resources :order_items
 
   resources :statuses
-
-  get 'users/new/:order_id', to: 'users#new', as: 'new_user'
-  resources :users
+  
+  resources :users do
+    collection do
+      post 'receipt'
+    end
+  end
 
   resources :items
 
-  delete '/order/:id', to: 'orders#destroy', as: :destory_order
+  # post 'verify_order/:id', to: 'orders#submit_order'
 
-  get 'orders/stats', to: 'orders#stats'
+  # delete '/order/:id', to: 'orders#destroy', as: :destory_order
 
-  resources :orders
+  # get 'orders/stats', to: 'orders#stats'
+
+  resources :orders do
+    member do
+      patch 'update'
+      post 'verify'
+      get 'verify'
+    end
+    collection do
+      get 'appreciation'
+      get 'status'
+      get 'stats'
+    end
+  end
 
   resources :categories
 
   get 'manage', to: 'static_pages#manage'
 
-  get 'order_status', to: 'orders#status'
+  # get 'order_status', to: 'orders#status'
 
-  get 'verify_order/:id', to: 'users#verify', as: :verify_order
+  # get 'verify_order/:id', to: 'orders#verify_order', as: :verify_order
+
+  # get 'order/appreciation', to: 'orders#appreciation'
+
 
   get 'faq', to: 'static_pages#faq'
 
   post 'scrape_data', to: 'items#scrape_data'
 
+  get 'contact_me', to: 'static_pages#contact_me'
+  post 'contact_me', to: 'static_pages#contact_me'
+
   root 'static_pages#index'
 
-  post 'orders/update', to: 'orders#update_orders'
+  # post 'orders/update', to: 'orders#update_orders'
 
 
   # The priority is based upon order of creation: first created -> highest priority.

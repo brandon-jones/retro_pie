@@ -4,7 +4,7 @@
     %meta{:charset => "utf-8"}
       %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}
         %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
-          %title Build my Pie
+          %title #{@page_tab}
           = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => false 
           %link{:href => "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css", :rel => "stylesheet"}/
           = javascript_include_tag "application", "data-turbolinks-track" => false
@@ -24,9 +24,8 @@
     %div.container-fluid
       %div.row
         %div.col-md-12
-          - if @title
-            %h1.text-center#title
-              =@title
+          %h1.text-center
+            Bake My Pie
           = render :partial => 'static_pages/header'
           = yield
           #footer

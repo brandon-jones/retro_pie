@@ -1,0 +1,40 @@
+%table.table{:style => "width:100%"}
+  %tr
+    %th Category
+    %th Item Name
+    %th Item Price
+    %th.item-quantity #
+    %th.item-total Total
+  - order.order_items.each do |order_item|
+    %tr
+      %td=order_item.item.category.name
+      %td=order_item.item.title
+      - price = order_item.item.base_item ? 'included' : '$' + ('%.2f' % order_item.item_price)
+      %td=price
+      %td.item-quantity=order_item.quantity
+      %td.item-total=price == 'included' ? price : '$'+('%.2f' % (price.gsub('$','').to_f * order_item.quantity.to_f))
+  %tr
+    %td{colspan: '3'}
+    %td.item-quantity
+    %td.item-total
+  - if order.delivery_type == 'delivery'
+    %tr
+      %td{colspan: '3'}
+      %td.item-quantity
+        %strong
+          Shipping:
+      %td.item-total
+        %strong
+          $
+          ='%.2f' % @order.shipping_price.to_f
+  %tr
+    %td{colspan: '3'}
+    %td.item-quantity
+      %strong
+        Total:
+    %td.item-total
+      %strong
+        $
+        ='%.2f' % order.total.to_f
+- unless @receipt.present? && @receipt
+  =link_to 'Edit Order Information', edit_order_path(@order.order_id, user_id: param("user_id"), payment_id: param('payment_id')), class: 'btn btn-default btn-sm'

@@ -48,61 +48,6 @@ module OrdersHelper
 		return ''
 	end
 
-	def build_receipt_table(order_items)
-		builder = "<table class='table'>
-			  <tr>
-			    <th>Category</th>
-			    <th>Item Name</th> 
-			    <th>Item Each Price</th>
-			    <th>Quantity</th>
-			    <th>Total</th>
-			  </tr>"
-		total = $base_price
-		order_items.each do |order_item|
-			item = Item.where(id: order_item.item_id).first
-			total += order_item.item_price unless item.base_item
-			# builder += "<strong>#{item.category.name}<br>"
-			builder += "
-			  <tr>
-			    <td>#{item.category.name}</td>
-			    <td>#{item.title}</td> 
-			    <td>#{item.base_item ? 'included' : '$' + ('%.2f' % order_item.item_price)}</td>
-			    <td>#{order_item.quantity}</td>
-			    <td>#{item.base_item ? 'included' : '$' + ('%.2f' % (order_item.quantity * order_item.item_price))}</td>
-			  </tr>"
-		end
-
-		builder += "<tr>
-			    <td></td>
-			    <td></td> 
-			    <td></td>
-			    <td></td>
-			    <td></td>
-			  </tr>"
-		if @order.delivery_type == 'delivery'
-			builder += "<tr>
-				    <td></td>
-				    <td></td> 
-				    <td></td>
-				    <td><strong>Shipping:</strong></td>
-				    <td>$#{'%.2f' % @order.shipping_price.to_f}</td>
-				  </tr>"
-		end
-
-		builder += "<tr>
-			    <td></td>
-			    <td></td> 
-			    <td></td>
-			    <td><strong>Total:</strong></td>
-			    <td>$#{'%.2f' % @order.total.to_f}</td>
-			  </tr>"
-
-
-		builder += "</table>"
-
-		return builder
-	end
-
 	def format_init_price
 		if @order.total
 			return "$#{'%.0f' % @order.total.to_f}"

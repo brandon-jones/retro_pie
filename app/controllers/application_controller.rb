@@ -1,12 +1,11 @@
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :null_session
+  protect_from_forgery with: :exception
 
   def authenticate
   	authenticate_or_request_with_http_basic do |username, password|
 	    if(username == ENV["RP_NAME"] && password == ENV["RP_PASSWORD"])
-	    	session[:my_pie_override] = 
 	      true
 	    else
 	      redirect_to root_path
@@ -14,32 +13,31 @@ class ApplicationController < ActionController::Base
   	end
 	end
 
-	def poor_auth
-		if session[:my_pie_order]
-			if session[:my_pie_order] == params["id"]
-				order = Order.where(order_id: session[:my_pie_order]).first
-				if order
-					return true
+	def session_auth
+		if ses = session["_bmp_#{params['controller'].singularize}_id".to_sym]
+			if table = params['controller'].singularize.capitalize
+				if params["id"].is_a? Integer
+					if valid_results = table.constantize.find_by_id(params["id"])
+						return true if valid_results
+					end
 				else
-					return false
+					if valid_results = table.constantize.find_by_order_id(params["id"])
+						return true if valid_results
+					end
 				end
-			else
-				return false
 			end
-		end
-		authenticate_or_request_with_http_basic do |username, password|
-			if order = Order.where(order_id: password).first
-		    if(username == order.email && password == order.order_id)
-		    	session[:my_pie_order] = order.order_id
-		      return true
-		   	end
-		  end
+		else
+			authenticate
+		end	
+	end
 
-	    if(username == ENV["RP_NAME"] && password == ENV["RP_PASSWORD"])
-	    	return true
-	    end
-  	end
-  	redirect_to root_path and return
+	def param(name)
+		if session["_bmp_#{name.to_sym}"]
+			return session["_bmp_#{name.to_sym}"]
+		elsif params[name]
+			return params[name]
+		end
+		return nil
 	end
 
 end

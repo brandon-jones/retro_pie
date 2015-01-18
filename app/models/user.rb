@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
 	validates_presence_of :name, :email
   before_save :shipping_required
+  has_many :orders
 
 	# include BCrypt
 
@@ -9,6 +10,10 @@ class User < ActiveRecord::Base
       binding.pry
     end
     return true
+  end
+
+  def orders
+    return Order.where(user_id: self.id)
   end
 
 	# def password

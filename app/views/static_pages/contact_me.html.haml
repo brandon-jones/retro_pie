@@ -1,0 +1,24 @@
+%div.row
+  %div.col-md-8.col-md-offset-2
+    %h2.text-center Contact Me
+    %p.text-center
+      Have a question, comment or anything else to tell me. Put it here and I will try to get back to you in a timly fassion.
+    = form_tag("/contact_me", method: "post", class: "form") do
+      .container-fluid
+        .row
+          .col-md-12
+            %div.form-group
+              %p
+                = label_tag(:name_label, "Name:")
+              = text_field_tag(:name, params["name"], class: "form-control")
+            %div.form-group
+              %p
+                = label_tag(:email_label, "Email Address:")
+              = email_field_tag(:email, params["contact_info"], class: "form-control")
+            %div.form-group
+              %p
+                = label_tag(:body_label, "Reason for contact:")
+              = text_area_tag(:body, params["body"], class: "form-control contact_me_body")
+            %div.form-group
+              .actions
+                = submit_tag("Send Question",class: 'btn btn-default')

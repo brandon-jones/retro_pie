@@ -1,0 +1,6 @@
+%p
+  %strong Amount:
+  $
+  = payment.amount
+- unless @receipt.present? && @receipt
+  =link_to 'Edit Payment Information', edit_payment_path(param("payment_id"), order_id: param('order_id'), user_id: param('user_id')), class: 'btn btn-default btn-sm'

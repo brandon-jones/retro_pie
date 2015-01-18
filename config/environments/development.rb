@@ -27,6 +27,17 @@ RetroPie::Application.configure do
   # number of complex assets.
   config.assets.debug = true
 
+  config.action_mailer.default_url_options = { :host => 'bakemypie.com' }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address:              'smtp.gmail.com',
+    port:                 587,
+    domain:               'bakemypie.com',
+    user_name:            ENV["GENERIC_EMAIL"],
+    password:             ENV["GENERIC_PASSWORD"],
+    authentication:       'plain',
+    enable_starttls_auto: true  }
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 end
