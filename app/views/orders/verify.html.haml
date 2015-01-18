@@ -1,6 +1,5 @@
 %div.row
   %div.col-md-8.col-md-offset-2
-    - binding.pry
     %h1 Verify Order
     %h3.text-center.red
       Your Order is not complete! 
@@ -9,7 +8,7 @@
     %p
       %h2.text-center
         Order
-      = render partial: 'orders/verify'
+      = render partial: 'orders/verify', locals: {order: @order}
     %p
       %br
       %h4
@@ -21,7 +20,7 @@
     %p
       %h2.text-center
         Payment Verification
-      = render partial: 'payments/verify'
+      = render partial: 'payments/verify', locals: {payment: @payment}
     %br
     = form_tag(verify_order_path(@order.order_id), method: "post", class: "form") do
       %p.text-center

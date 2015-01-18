@@ -33,7 +33,6 @@ class PaymentsController < ApplicationController
     respond_to do |format|
       if @payment.save
         session[:_bmp_payment_id] = @payment.id
-        binding.pry
         format.html { redirect_to verify_order_path(params["payment"]["order_order_id"], user_id: params["payment"]["user_id"], payment_id: @payment.id), notice: 'Payment was successfully created.' }
         format.json { render action: 'show', status: :created, location: @payment }
       else
@@ -46,7 +45,6 @@ class PaymentsController < ApplicationController
   # PATCH/PUT /payments/1
   # PATCH/PUT /payments/1.json
   def update
-    binding.pry
     @order = Order.find_by_order_id(params["payment"]["order_id"])
 
     @order = Order.find_by_order_id(params["payment"]["order_order_id"]) unless @order

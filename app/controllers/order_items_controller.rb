@@ -64,7 +64,6 @@ class OrderItemsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order_item
-      binding.pry
       @order_item = OrderItem.where(order_id: params[:id]).first
     end
 
