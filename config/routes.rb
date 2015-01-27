@@ -1,5 +1,7 @@
 RetroPie::Application.routes.draw do
 
+  resources :faqs
+
   resources :payments
 
   resources :order_items
@@ -23,11 +25,13 @@ RetroPie::Application.routes.draw do
   resources :orders do
     member do
       patch 'update'
-      post 'verify'
       get 'verify'
+      post 'verify'
     end
     collection do
-      get 'appreciation'
+      post 'update_status'
+      post 'appreciation'
+      get 'sorry'
       get 'status'
       get 'stats'
     end
@@ -44,7 +48,7 @@ RetroPie::Application.routes.draw do
   # get 'order/appreciation', to: 'orders#appreciation'
 
 
-  get 'faq', to: 'static_pages#faq'
+  # get 'faq', to: 'static_pages#faq'
 
   post 'scrape_data', to: 'items#scrape_data'
 

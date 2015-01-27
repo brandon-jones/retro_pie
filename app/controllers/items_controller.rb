@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :authenticate
-
+  skip_before_action :verify_authenticity_token, only: [:scrape_data]
   # GET /items
   # GET /items.json
   def index

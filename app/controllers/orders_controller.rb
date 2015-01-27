@@ -2,6 +2,7 @@ class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
   before_action :authenticate, only: [:index]
   before_action :session_auth, only: [:edit, :update, :show]
+  skip_before_action :verify_authenticity_token, only: [:update_status, :appreciation]
   # GET /orders
   # GET /orders.json
   def index
@@ -21,7 +22,13 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.json
   def show
-    
+    binding.pry
+  end
+
+  def update_status
+
+    binding.pry
+    redirect_to appreciation_orders_path
   end
 
   def status
@@ -40,6 +47,8 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @order = Order.new
+    @user = User.new
+    @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
     @categories = {}
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
       @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
@@ -72,6 +81,11 @@ class OrdersController < ApplicationController
         redirect_to verify_order_path(params["id"], user_id: params["user_id"], payment_id: params["payment_id"]), {notice: 'Some error prevented updating the information.' }
       end
     end
+  end
+
+  def appreciation
+
+    binding.pry
   end
 
   def submit_order

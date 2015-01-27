@@ -5,6 +5,8 @@
 - @user.orders.each do |order|
   %h3 Status
   =order.status.name
+  - if order.shipping
+    = render partial: 'shippings/verify', locals: {shipping: order.shipping}
   %br
   = render partial: 'orders/verify', locals: { order: order }
   - order.payments.each do |payment|

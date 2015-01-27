@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   def shipping_required
     if self.delivery_type == 'delivery'
+      binding.pry
     end
     return true
   end

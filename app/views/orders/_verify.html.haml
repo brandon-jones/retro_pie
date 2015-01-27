@@ -15,7 +15,6 @@
       - price = order_item.item.base_item ? 'included' : '$' + ('%.2f' % order_item.item_price)
       %td=price
       %td.item-quantity=order_item.quantity
-      %td.item-total=price == 'included' ? price : '$'+('%.2f' % (price.gsub('$','').to_f * order_item.quantity.to_f))
   %tr
     %td{colspan: '3'}
     %td.item-quantity
@@ -29,7 +28,7 @@
       %td.item-total
         %strong
           $
-          ='%.2f' % @order.shipping_price.to_f
+          ='%.2f' % order.shipping_price.to_f
   %tr
     %td{colspan: '3'}
     %td.item-quantity

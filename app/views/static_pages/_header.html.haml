@@ -1,6 +1,8 @@
 #header.text-center
-	=link_to 'Home', root_path, class: 'btn btn-info'
-	=link_to 'Bake my Pie', new_order_path, class: 'btn btn-danger'
-	=link_to 'Check Order Status', status_orders_path, class: 'btn btn-info'
-	=link_to 'Contact Me', contact_me_path, class: 'btn btn-info'
-	=link_to 'FAQ', faq_path, class: 'btn btn-info'
+	= puts "CONTROLLER: #{params["controller"]}"
+	= puts params
+	=link_to 'Home', root_path, class: "btn btn-info" + (params["controller"] == 'static_pages' && params["action"] == 'index' ? " active" : "")
+	=link_to 'Bake my Pie', new_order_path, class: "btn btn-danger" + (params["controller"] == 'orders' && params["action"] == 'new' ? " active" : "")
+	=link_to 'Check Order Status', status_orders_path, class: "btn btn-info" + (params["controller"] == 'orders' && params["action"] == 'status' ? " active" : "")
+	=link_to 'Contact Me', contact_me_path, class: "btn btn-info" + (params["controller"] == 'static_pages' && params["action"] == 'contact_me' ? " active" : "")
+	=link_to 'FAQ', faqs_path, class: "btn btn-info" + (params["controller"] == 'faqs' ? " active" : "")
