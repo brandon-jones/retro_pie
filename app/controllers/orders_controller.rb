@@ -1,7 +1,6 @@
 class OrdersController < ApplicationController
   before_action :set_order, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, only: [:index]
-  before_action :session_auth, only: [:edit, :update, :show]
+  before_action :authenticate, only: [:index, :destroy]
   skip_before_action :verify_authenticity_token, only: [:update_status, :appreciation]
   # GET /orders
   # GET /orders.json
@@ -26,12 +25,12 @@ class OrdersController < ApplicationController
   end
 
   def update_status
-
-    binding.pry
-    redirect_to appreciation_orders_path
+    UpdatePaymentInfo.perform_async(params)
+    render :text => ""
   end
 
   def status
+    @statuses = Status.all
     # if params["order_id"]
     #   order = params["order_id"]
     # elsif session[:my_pie_order]
@@ -85,7 +84,7 @@ class OrdersController < ApplicationController
 
   def appreciation
 
-    binding.pry
+    UpdatePaymentInfo.perform_async(params)
   end
 
   def submit_order

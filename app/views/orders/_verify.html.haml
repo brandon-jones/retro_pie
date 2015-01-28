@@ -19,6 +19,15 @@
     %td{colspan: '3'}
     %td.item-quantity
     %td.item-total
+  %tr
+    %td{colspan: '3'}
+    %td.item-quantity
+      %strong
+        Total:
+    %td.item-total
+      %strong
+        $
+        ='%.2f' % (order.total).to_f
   - if order.delivery_type == 'delivery'
     %tr
       %td{colspan: '3'}
@@ -33,10 +42,10 @@
     %td{colspan: '3'}
     %td.item-quantity
       %strong
-        Total:
+        Final Total:
     %td.item-total
       %strong
         $
-        ='%.2f' % order.total.to_f
+        ='%.2f' % (order.total + order.shipping_price).to_f
 - unless @receipt.present? && @receipt
   =link_to 'Edit Order Information', edit_order_path(@order.order_id, user_id: param("user_id"), payment_id: param('payment_id')), class: 'btn btn-default btn-sm'

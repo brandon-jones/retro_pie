@@ -7,7 +7,7 @@ Shipping information
       = name
       \: #{value}
 Order
-- @user.orders.each do |order|
+- @orders.each do |order|
   - order.attributes.each do |name, value|
     - unless ['created_at', 'updated_at', 'id', 'total', 'cost'].include?(name)
       = name

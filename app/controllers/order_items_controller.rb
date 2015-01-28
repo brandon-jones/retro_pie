@@ -1,6 +1,6 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate
   # GET /order_items
   # GET /order_items.json
   def index

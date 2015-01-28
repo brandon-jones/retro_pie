@@ -2,7 +2,7 @@
   Hello #{@user.name} here is your receipt/updated status
 %hr
 = render partial: 'users/verify'
-- @user.orders.each do |order|
+- @orders.each do |order|
   %h3 Status
   =order.status.name
   - if order.shipping

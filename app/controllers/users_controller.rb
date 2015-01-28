@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate, only: [:index, :show]
+  before_action :authenticate, only: [:index, :show, :destroy]
   before_action :session_auth, only: [:edit, :update, :show]
   # GET /users
   # GET /users.json
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 
   def receipt
     if @user = User.where(email: params["user_email"]).first
-      EmailedReceiptMailer.emailed_receipt_send_mail(@user).deliver
+      EmailedReceiptMailer.emailed_receipt_send_mail(@user, params["user_order_id"]).deliver
     end
     redirect_to root_url, notice: "If email address mathing your is fond you will get an email with newest order information"
   end
@@ -49,26 +49,13 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         @order = Order.find_by_order_id(params["order_id"])
-        binding.pry
         @order.delivery_type = params["delivery_type"]
         @order.shipping_price = $shipping unless @order.delivery_type == 'pickup'
         @order.user_id = @user.id
         @order.save
-        # params['shipping']['order_id'] = @order.id
-        # shipping = Shipping.where(order_id: @order.id).first || Shipping.new()
-        # params['shipping'].keys.each do |key|
-        #    shipping[key] = params['shipping'][key]
-        # end
-        # if shipping.save
-          session[:_bmp_user_id] = @user.id
-          format.html { redirect_to verify_order_path(param("order_id"), user_id: @user.id)}
-          format.json { render action: 'show', status: :created, location: @user }
-        # else
-        #   @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
-        #   @order = Order.find_by_order_id(params["order_id"])
-        #   @payment = Payment.find_by_id(params["payment_id"])
-        #   format.html { render action: 'new', params: params }
-        # end
+        session[:_bmp_user_id] = @user.id
+        format.html { redirect_to verify_order_path(param("order_id"), user_id: @user.id)}
+        format.json { render action: 'show', status: :created, location: @user }
       else
         @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
         @order = Order.find_by_order_id(params["order_id"])

@@ -1,5 +1,6 @@
 class PaymentsController < ApplicationController
   before_action :set_payment, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate, except: [:update_status, :appreciation]
 
   # GET /payments
   # GET /payments.json

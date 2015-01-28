@@ -33,6 +33,8 @@ gem 'local_time', '~> 1.0.0'
 
 gem 'bcrypt', '~> 3.1.9'
 
+gem 'sidekiq'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

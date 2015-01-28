@@ -9,36 +9,19 @@
           = label_tag(:user_email_label, "Order Email:")
         = text_field_tag(:user_email, nil, class: "form-control")
       %div.form-group
+        %p
+          = label_tag(:user_order_id_label, "Order ID:")
+          %small
+            If left empty I will email you all orders associtated with your email address.
+        = text_field_tag(:user_order_id, nil, class: "form-control")
+      %div.form-group
         .actions
           = submit_tag("Check order status",class: 'btn btn-default')
     %br
-    Order status usually follow the following progression:
+    Order status will be one of the following:
     %ol
-      %li
-        %strong
-          Unsubmitted:
-        You need to verify your order before I will contact you
-      %li
-        %strong
-          Ordered:
-        Waiting to be contact by me
-      %li
-        %strong
-          Verified:
-        You have been verified by me and payment has been arranged
-      %li
-        %strong
-          Waiting for Payment: 
-        Waiting to get payment
-      %li
-        %strong
-          Building:
-        I am building your device. should take no more than a day or two.
-      %li
-        %strong
-          Shipped:
-        I have shipped the Pie
-      %li
-        %strong
-          Closed:
-        Either I have not heard back from you or we have talked and I know you are happy.
+      - @statuses.each do |status|
+        %li
+          %strong
+            =status.name
+          =status.description

@@ -18,7 +18,7 @@
       %th 
         =caret('perferred_contact').html_safe
         %a{href: '#', class: 'change_sort', data: 'perferred_contact'}
-          Perferred contact
+          Phone Number
       %th 
         =caret('total').html_safe
         %a{href: '#', class: 'change_sort', data: 'total'}
@@ -34,9 +34,9 @@
     - @orders.each do |order|
       %tr{class: 'order-row'}
         %td{class: 'order_id'}= order.order_id
-        %td
-        %td
-        %td
+        %td=order.user.name
+        %td=order.user.email
+        %td=order.user.phone
         %td= '$' + '%.2f' % order.total
         %td= select_tag order.id, options_for_select(@statuses, order.status.id), {class: 'order-change status_id'}
         %td= link_to 'Details', '#', {class: 'btn btn-primary btn-xs order-details', data: "#{order.order_id}"}

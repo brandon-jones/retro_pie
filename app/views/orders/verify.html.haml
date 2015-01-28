@@ -4,7 +4,7 @@
     %h3.text-center.red
       Your Order is not complete! 
       %br
-      Please verify below to complete your order
+      I will start making your order once I get payment confirmation.
     %p
       %h2.text-center
         Buyer Information
@@ -20,3 +20,5 @@
     %p.text-center
       - locals = Rails.env == 'development' ? { url: 'sandbox.paypal', business: 'WWT4KH9KAMUJQ', server_address: 'http://localhost:3003' } : { url: 'paypal', business: 'KELDMZTJ73GDA', server_address: 'http://bakemypie.com' }
       = render partial: 'payment_button', locals: locals
+    %p
+      Make sure to click back to my site after paying through paypal. Doing this means I get payment verification much faster.
