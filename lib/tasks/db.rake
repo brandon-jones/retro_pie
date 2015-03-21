@@ -10,4 +10,16 @@ namespace :db do
   	puts 'dropping users'
   	User.delete_all
   end
+
+  task :myreset => :environment do
+    puts 'dropping databse'
+    `rake db:drop`
+    puts 'creating database'
+    `rake db:create`
+    puts 'migrating database'
+    `rake db:migrate`
+    puts 'populating categories'
+    `rake populate:categories`
+    puts 'DONE!'
+  end
 end

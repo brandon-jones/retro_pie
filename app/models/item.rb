@@ -1,9 +1,11 @@
 class Item < ActiveRecord::Base
-	validates :title, :description, :amazon_url, :image_url, :price, :category, :markup, presence: true
+	validates :title, :description, :amazon_url, :image_url, :cost, :category, :markup, presence: true
 	
 	before_save :correct_format
 	
 	belongs_to :category
+
+  monetize :cost_cents
 
 	def correct_format
 		if self.markup.include?('$') || self.markup.include?('%') || self.markup.include?('x')
@@ -36,7 +38,7 @@ class Item < ActiveRecord::Base
 		return_hash["title"] = body.css(params["title_css"]).text
 		return_hash["description"] = body.css(params["description_css"]).css('li').collect { |li| li.text + "\n" }.join()
 		return_hash["image_url"] = body.css(params["image_url_css"]).first["src"] if body.css(params["image_url_css"]) && body.css(params["image_url_css"]).count > 0
-		return_hash["price"] = body.css(params["price_css"]).text.gsub('$','')
+		return_hash["cost"] = body.css(params["cost_css"]).text.gsub('$','')
 		return_hash["error"] = "Info scrapped from site"
 		body.css('bucket normal').text
 		return return_hash

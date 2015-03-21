@@ -1,6 +1,8 @@
 class Payment < ActiveRecord::Base
 	belongs_to :order
 
+	monetize :amount_cents
+
 	# after_initialize :set_defaults
 
 	# def set_defaults

@@ -4,6 +4,8 @@ class Order < ActiveRecord::Base
 	has_many :order_items, dependent: :destroy
 	has_many :payments
 	belongs_to :user
+ 
+  monetize :total_cents, :cost_cents, :shipping_price_cents
 
 	def local_shipping
 		if self.delivery_type && self.delivery_type.present?
@@ -17,7 +19,7 @@ class Order < ActiveRecord::Base
 	end
 
 	def set_defaults
-		self.status_id = Status.all.where(name: 'Unsubmitted').first.id unless self.status_id
+		self.status_id = Status.all.where(name: 'Unsubmitted').first.id unless self.status_id || Status.all.length < 1
 		self.order_id = SecureRandom.hex(12) unless self.order_id
 		self.shipping_price = 0 unless self.shipping_price
 	end
@@ -72,7 +74,7 @@ class Order < ActiveRecord::Base
 			if oi = OrderItem.where(order_id: self.id, item_id: item["item_id"]).first
 				oi.quantity = item["quantity"]
 			else
-				oi = OrderItem.new(item_id: item["item_id"], quantity: item["quantity"], item_price: db_item.markup.gsub('$','').strip.to_i, item_cost: db_item.price, order_id: self.id)
+				oi = OrderItem.new(item_id: item["item_id"], quantity: item["quantity"], item_price: db_item.markup.gsub('$','').strip.to_i, item_cost_cents: db_item.price_cents, order_id: self.id)
 			end
 			oi.save
 		end

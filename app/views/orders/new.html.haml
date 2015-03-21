@@ -1,12 +1,15 @@
 %div.row
   %div.col-md-6.col-md-offset-3
     %p.text-center
-      All new orders start out with the base model and you can upgrade from there. The base model costs $#{$base_price.to_s}. This includes my fee for setting it up but does not include $#{$shipping} shipping. You may pick up locally you are near enough to me.
+      All new orders start out with the base model and you can upgrade from there. My fee to set up the Pi is $#{$base_fee.to_s}. I have selected what I consier the base model and everyone must buy this. You can upgrade parts if you want to spend extra. These prices not include shipping which is $#{$shipping}. You may pick up locally if are near enough to me.
     %h4
       Please note. I will get the best items I can for the money. This means that the items in the pictures are used as representations.
     = render 'form'
   .col-md-3.text-center
-    %h3#total-box-floater
-      Total:
-      %span.total
-        =format_init_price
+    #total-box-floater
+      %h3
+        Total:
+        %span.total
+          =format_init_price
+      .text-center
+        this includes my service fee

@@ -18,7 +18,8 @@ class ItemsController < ApplicationController
   def scrape_data
     @item_values = Item.scrape_data(params)
 
-    render json: @item_values
+    render json: @item_values and return unless @item_values == nil
+    render json: { errors: "Unable to scrape data try again" }
   end
 
   # GET /items/new
@@ -84,6 +85,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:title, :description, :amazon_url, :image_url, :price, :base_item, :category_id, :markup, :title_locked, :description_locked, :image_url_locked, :title_css, :description_css, :image_url_css, :price_css)
+      params.require(:item).permit(:title, :description, :amazon_url, :image_url, :cost, :base_item, :category_id, :markup, :title_locked, :description_locked, :image_url_locked, :title_css, :description_css, :image_url_css, :cost_css)
     end
 end

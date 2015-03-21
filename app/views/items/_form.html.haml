@@ -8,6 +8,12 @@
         - @item.errors.full_messages.each do |msg|
           %li= msg
   .field.form-group
+    = f.label :amazon_url
+    = f.text_field :amazon_url, class: 'form-control'
+    = button_tag 'Scrape Data', :type => 'button', id: 'scrape_data'
+    #scrape-info
+  %hr
+  .field.form-group
     = f.label :title_locked
     = f.check_box :title_locked
   .field.form-group
@@ -26,11 +32,6 @@
     = f.label :description_css
     = f.text_field :description_css, {class: 'form-control', value: '#feature-bullets'}
   .field.form-group
-    = f.label :amazon_url
-    = f.text_field :amazon_url, class: 'form-control'
-    = button_tag 'Scrape Data', :type => 'button', id: 'scrape_data'
-    #scrape-info
-  .field.form-group
     = f.label :image_url_locked
     = f.check_box :image_url_locked
   .field.form-group
@@ -40,12 +41,12 @@
     = f.label :image_url_css
     = f.text_field :image_url_css, {class: 'form-control', value: '#imgTagWrapperId img'}
   .field.form-group
-    = f.label :price
+    = f.label :cost
     %small
       in $
-    = f.text_field :price, class: 'form-control'
-    = f.label :price_css
-    = f.text_field :price_css, {class: 'form-control', value: '#priceblock_ourprice'}
+    = f.text_field :cost, class: 'form-control'
+    = f.label :cost_css
+    = f.text_field :cost_css, {class: 'form-control', value: '#priceblock_ourprice'}
   .field.form-group
     = f.label :markup
     %small

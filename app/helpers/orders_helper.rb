@@ -14,12 +14,11 @@ module OrdersHelper
 	def figure_increase_cost(this_category,this_price)
 		cat_id = Category.where(name: this_category).first.id
 		if base_item = Item.where(category_id: cat_id, base_item: true).first
-			base_price = base_item.markup.gsub('$','').to_i
+			base_fee = base_item.markup.gsub('$','').to_i
 		end
 		this_price = this_price.gsub('$','').to_i
-		if base_price && this_price
-			new_price = this_price - base_price
-			return 'included' if new_price == 0
+		if base_fee && this_price
+			new_price = this_price - base_fee
 			return "$#{this_price}"
 		end
 		return "$#{this_price}"
@@ -52,7 +51,7 @@ module OrdersHelper
 		if @order.total
 			return "$#{'%.0f' % @order.total.to_f}"
 		end
-		return "$#{'%.0f' % $base_price}"
+		return "$#{'%.0f' % $base_fee}"
 	end
 
 end

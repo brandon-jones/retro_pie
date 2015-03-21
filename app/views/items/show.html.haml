@@ -26,8 +26,8 @@
       %strong image url locked:
       = @item.image_url_locked
     %p
-      %strong Price:
-      $#{@item.price}
+      %strong Cost:
+      #{humanized_money_with_symbol(@item.cost)}
     %p
       %strong Markup:
       = @item.markup

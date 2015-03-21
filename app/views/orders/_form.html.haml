@@ -27,13 +27,15 @@
                 =figure_increase_cost(key,item.markup)
               %td
                 =quantity_selector(item).html_safe
-  =f.hidden_field :total_price, value: (@order.total || $base_price), id: 'clean-total', name: "order[total]"
+  =f.hidden_field :total_price, value: (@order.total || $base_fee), id: 'clean-total', name: "order[total]"
   =f.hidden_field :order_id, value: (@order.order_id || ''), name: "order[order_id]"
-  %h3.text-center#total-box
-    Total
-    %span.total
-      =format_init_price
-
+  #total-box
+    %h3.text-center
+      Total
+      %span.total
+        =format_init_price
+    .text-center
+      this includes my service fee
   - if @order.errors.any?
     #error_explanation.field.form-group
       %h2
