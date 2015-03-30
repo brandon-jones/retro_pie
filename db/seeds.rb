@@ -7,12 +7,14 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 puts 'seeding categories'
-Category.create(name: "Pie")
-Category.create(name: "Memory Card")
-Category.create(name: "Controller")
-Category.create(name: "Case")
-Category.create(name: "HDMI cable")
-Category.create(name: "Internet")
+Category.create(name: 'Pi')
+Category.create(name: 'Case')
+Category.create(name: 'Charger')
+Category.create(name: 'Memory Card')
+Category.create(name: 'Hdmi Cable')
+Category.create(name: 'Controllers')
+Category.create(name: 'Keyboard')
+Category.create(name: 'Service Charge')
 
 puts 'seeding status'
 Status.create(name: "Unsubmitted", description: 'I have not heard back on payment.')
@@ -27,4 +29,3 @@ faqs = YAML.load_file("config/faq.yml")
 faqs.each do |faq|
 	Faq.create(question: faq["question"],answer:  faq["answer"])
 end
-

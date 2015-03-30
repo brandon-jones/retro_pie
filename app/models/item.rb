@@ -1,11 +1,24 @@
 class Item < ActiveRecord::Base
-	validates :title, :description, :amazon_url, :image_url, :cost, :category, :markup, presence: true
+	validates :title, :description, :cost, :category, :markup, presence: true
 	
 	before_save :correct_format
 	
 	belongs_to :category
 
   monetize :cost_cents
+
+  def self.has_base?(items)
+  	items.each do |item|
+  		return true if item.base_item
+  	end
+  	return false
+  end
+
+  def self.service_charge
+  	# category = 
+  	category = Category.find_or_create_by(name: 'Serivce Charge')
+  	return Item.new(title: 'Service Charge', description: 'This is my serivce for setting it up. You can not remove this.', cost: $service_charge * 100, base_item: true, category_id: category.id)
+  end
 
 	def correct_format
 		if self.markup.include?('$') || self.markup.include?('%') || self.markup.include?('x')

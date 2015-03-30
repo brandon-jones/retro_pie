@@ -11,17 +11,27 @@ module OrdersHelper
 		return ''
 	end
 
-	def figure_increase_cost(this_category,this_price)
-		cat_id = Category.where(name: this_category).first.id
-		if base_item = Item.where(category_id: cat_id, base_item: true).first
-			base_fee = base_item.markup.gsub('$','').to_i
+	# def figure_increase_cost(this_category,this_price)
+	# 	cat_id = Category.where(name: this_category).first.id
+	# 	if base_item = Item.where(category_id: cat_id, base_item: true).first
+	# 		base_fee = base_item.markup.gsub('$','').to_i
+	# 	end
+	# 	this_price = this_price.gsub('$','').to_i
+	# 	if base_fee && this_price
+	# 		new_price = this_price - base_fee
+	# 		return "$#{this_price}"
+	# 	end
+	# 	return "$#{this_price}"
+	# end
+
+	def figure_price(item)
+		if item.markup.include?('$')
+			return Money.new(item.markup.gsub('$','').to_i * 100)
+		elsif item.markup.include?('x')
+			binding.pry
+		elsif item.markup.include?('%')
+			return item.cost * (1 + ( 0.01 * item.markup.gsub('%','').to_i))
 		end
-		this_price = this_price.gsub('$','').to_i
-		if base_fee && this_price
-			new_price = this_price - base_fee
-			return "$#{this_price}"
-		end
-		return "$#{this_price}"
 	end
 
 	def quantity_selector(item)
@@ -29,7 +39,7 @@ module OrdersHelper
 		builder = "<select class='dropdown-price-changer price-changer' name='order[items][#{item.category.name}][#{item.id}][quantity]'>"
 
 		builder += "<option value='1' #{quantity==1?'selected':''}>1</option>"
-		if item.category.name == "Controller"		
+		if item.category.name.downcase == "controllers"		
 			if item.base_item
 				builder += "<option value='2' #{quantity==2?'selected':''}>2 +#{item.markup}</option>"
 			else
@@ -47,11 +57,11 @@ module OrdersHelper
 		return ''
 	end
 
-	def format_init_price
-		if @order.total
-			return "$#{'%.0f' % @order.total.to_f}"
-		end
-		return "$#{'%.0f' % $base_fee}"
-	end
+	# def format_init_price
+	# 	if @order.total
+	# 		return "$#{'%.0f' % @order.total.to_f}"
+	# 	end
+	# 	return "$#{'%.0f' % $base_fee}"
+	# end
 
 end

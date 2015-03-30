@@ -54,13 +54,13 @@ ActiveRecord::Schema.define(version: 20150321013909) do
   create_table "order_items", force: :cascade do |t|
     t.integer  "item_id"
     t.integer  "quantity"
-    t.integer  "item_price_cents",    default: 0,     null: false
-    t.string   "item_price_currency", default: "USD", null: false
-    t.integer  "item_cost_cents",     default: 0,     null: false
-    t.string   "item_cost_currency",  default: "USD", null: false
+    t.integer  "price_cents",    default: 0,     null: false
+    t.string   "price_currency", default: "USD", null: false
+    t.integer  "cost_cents",     default: 0,     null: false
+    t.string   "cost_currency",  default: "USD", null: false
     t.integer  "order_id"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
   end
 
   create_table "orders", force: :cascade do |t|

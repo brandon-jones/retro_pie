@@ -16,7 +16,7 @@ scrapeData = function(event) {
         title_css: $("#item_title_css").val(),
         description_css: $("#item_description_css").val(),
         image_url_css: $("#item_image_url_css").val(),
-        price_css: $("#item_cost_css").val()
+        cost_css: $("#item_cost_css").val()
       },
       success: function(data, textStatus) {
         if (data.errors) {
@@ -25,7 +25,8 @@ scrapeData = function(event) {
           $("#item_title").val(data.title);
           $("#item_description").val(data.description);
           $("#item_image_url").val(data.image_url);
-          $("#item_cost").val(data.price);
+          console.log(data);
+          $("#item_cost").val(data.cost);
           return $("#scrape-info").html(data.error);
         }
         

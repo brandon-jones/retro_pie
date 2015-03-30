@@ -1,13 +1,44 @@
-var delay, changeSort, showOrderDetails, fadeOutGreen, getPrice, getQuantity, isRowActive, remove_updated_classes, saveOrderEdits, updateQuantity, toggleChangedFlag;
+var delay, rows, changeSort, showOrderDetails, fadeOutGreen, getPrice, getQuantity, isRowActive, remove_updated_classes, saveOrderEdits, updateQuantity, toggleChangedFlag;
 
-$(function() {
+$(document).ready(function() {
   updateFinalTotal();
   $(".price-changer").on("change", updateFinalTotal);
   $('.order-change').on("change", toggleChangedFlag);
   $('#save_order_edits').on("click", saveOrderEdits);
   $('.change_sort').on("click", changeSort);
+  $('.radio-order-update').on("click", updateRadioButtons);
+  $('.clear-radios').on("click", clearTbody);
   return $('.order-details').on("click", showOrderDetails);
 });
+
+clearTbody = function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var input = this;
+  var table = input.dataset.table;
+  clearRadioButtons($('.'+table));
+  updateFinalTotal();
+};
+
+clearRadioButtons = function(rows) {
+  $.each(rows, function( index, value ) {
+    value.children[0].children[0].checked = false
+  });
+};
+
+updateRadioButtons = function(e) {
+  e.stopPropagation();
+  // e.preventDefault();
+  var selected_radio = this;
+  var table = selected_radio.id.split('_')[0];
+  var rows = $('.'+table);
+
+  clearRadioButtons(rows);
+
+  selected_radio.checked = true;
+
+  updateFinalTotal();
+}
 
 showOrderDetails = function(e) {
   var details_id;
@@ -39,16 +70,16 @@ changeSort = function(event) {
 
 updateFinalTotal = function(event) {
   var total_price;
-  total_price = 25;
+  total_price = 0;
   $(".item-row").each(function(element) {
     var price, quantity;
     if (isRowActive(this)) {
       quantity = getQuantity(this);
       price = getPrice(this, quantity);
-      total_price = parseInt(total_price) + parseInt(price);
+      total_price = total_price + price;
     }
   });
-  return $('.total').text("$" + total_price);
+  return $('.total').text("$" + Math.round(total_price * 100) / 100);
 };
 
 getPrice = function(row, quantity) {
@@ -59,7 +90,7 @@ getPrice = function(row, quantity) {
       return 0;
     }
   } else {
-    return quantity * row.children[3].children[0].value;
+    return quantity * row.children[3].innerText.replace('$','');
   }
 };
 

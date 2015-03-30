@@ -9,6 +9,10 @@ namespace :db do
   	Payment.delete_all
   	puts 'dropping users'
   	User.delete_all
+    puts 'dropping status'
+    Status.delete_all
+    puts 'dropping categories'
+    Category.delete_all
   end
 
   task :myreset => :environment do

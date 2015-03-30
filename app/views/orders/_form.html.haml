@@ -10,6 +10,7 @@
         %thead
           %tr
             %th 
+              = link_to 'Clear', '#', class: 'small clear-radios', data: { table: "#{key.downcase}" } unless Category.has_base?(key)
             %th Name
             %th Image
             %th Price
@@ -17,25 +18,19 @@
         %tbody
           -@categories[key].each do |item|
             %tr{class: "#{key.downcase} item-row"}
-              %td= check_box_tag key.downcase, item.id, item.base_item, {class: 'checkbox-price-changer price-changer', disabled: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", checked: item.base_item || @order.order_items.collect{ |c| c.item_id }.include?(item.id)}
+              %td= radio_button_tag key.downcase, item.id, item.base_item, {class: 'radio-order-update', selected: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", value: 'true'}
               %td{class: 'title'}= item.title
               %td
-                %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
+                - if item.image_url.present?
+                  %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
               %td{class: 'price'}
-                =f.hidden_field :actual_price, value: item.markup.gsub('$',''), name: "order[items][#{item.category.name}][#{item.id}][price]"
-                =f.hidden_field :base_item, value: item.base_item, name: "order[items][#{item.category.name}][#{item.id}][base_item]"
-                =figure_increase_cost(key,item.markup)
+                =humanized_money_with_symbol(figure_price(item))
               %td
                 =quantity_selector(item).html_safe
-  =f.hidden_field :total_price, value: (@order.total || $base_fee), id: 'clean-total', name: "order[total]"
-  =f.hidden_field :order_id, value: (@order.order_id || ''), name: "order[order_id]"
   #total-box
     %h3.text-center
       Total
       %span.total
-        =format_init_price
-    .text-center
-      this includes my service fee
   - if @order.errors.any?
     #error_explanation.field.form-group
       %h2

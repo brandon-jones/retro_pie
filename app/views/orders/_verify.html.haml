@@ -12,8 +12,7 @@
     %tr
       %td=order_item.item.category.name
       %td=order_item.item.title
-      - price = order_item.item.base_item ? 'included' : '$' + ('%.2f' % order_item.item_price)
-      %td=price
+      %td=order_item.price
       %td.item-quantity=order_item.quantity
   %tr
     %td{colspan: '3'}
@@ -27,7 +26,7 @@
     %td.item-total
       %strong
         $
-        ='%.2f' % (order.total).to_f
+        = order.total 
   - if order.delivery_type == 'delivery'
     %tr
       %td{colspan: '3'}
@@ -37,7 +36,7 @@
       %td.item-total
         %strong
           $
-          ='%.2f' % order.shipping_price.to_f
+          = order.shipping_price
   %tr
     %td{colspan: '3'}
     %td.item-quantity
