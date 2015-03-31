@@ -13,8 +13,7 @@
     %small
       You must come to me for it to be local
     = f.select :delivery_type, options_for_select([['Pickup','pickup'],['Delivery','delivery']]), {}, class: 'form-control', id: 'select-delivery-type', name: 'delivery_type'
-    -if @order
-      = f.hidden_field :order_id, value: @order.order_id, name: "order_id"
+    = f.hidden_field :order_id, value: @order.order_id, name: "order_id"
   - if @user.errors.any?
     #error_explanation
       %h2

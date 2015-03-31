@@ -1,6 +1,6 @@
 %p
   Order date: 
-  =order.created_at
+  =local_time(order.created_at)
 %table.table{:style => "width:100%"}
   %tr
     %th Category
@@ -12,8 +12,9 @@
     %tr
       %td=order_item.item.category.name
       %td=order_item.item.title
-      %td=order_item.price
+      %td=humanized_money_with_symbol(order_item.price)
       %td.item-quantity=order_item.quantity
+      %td=humanized_money_with_symbol(order_item.quantity * order_item.price)
   %tr
     %td{colspan: '3'}
     %td.item-quantity
@@ -47,4 +48,4 @@
         $
         ='%.2f' % (order.total + order.shipping_price).to_f
 - unless @receipt.present? && @receipt
-  =link_to 'Edit Order Information', edit_order_path(@order.order_id, user_id: param("user_id"), payment_id: param('payment_id')), class: 'btn btn-default btn-sm'
+  =link_to 'Edit Order Information', edit_order_path(@order.order_id, user_id: params["user_id"], payment_id: params['payment_id']), class: 'btn btn-default btn-sm'

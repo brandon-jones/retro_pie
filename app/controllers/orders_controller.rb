@@ -45,18 +45,18 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    if order_id = cookies[:retro_order_id]
+    if order_id = cookies[:_bmp_order_id]
       if @order = Order.find_by_order_id(order_id)
         @order = nil unless @order.status.name == 'Unsubmitted'
       else
         @order = Order.new
-        cookies[:retro_order_id] = @order.order_id
+        cookies[:_bmp_order_id] = @order.order_id
       end
     end
 
     unless @order
       @order = Order.new
-      cookies[:retro_order_id] = @order.order_id
+      cookies[:_bmp_order_id] = @order.order_id
     end
     # @user = User.new
     # @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
@@ -81,7 +81,7 @@ class OrdersController < ApplicationController
   end
 
   def verify
-    @order = Order.where(order_id: params["id"]).first
+    @order = Order.find_by_order_id(params["id"])
     @user = User.find_by_id(params["user_id"])
     @payment = Payment.where(id: params["payment_id"]).first
     if params["commit"]
@@ -117,25 +117,17 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    binding.pry
-    if params["order"]["order_id"].present?
-      #   @title =  params["order"]["order_id"]
-      # else
-      #   @title = "New Order"
-      # end
-      if @order = Order.where(order_id: params["order"]["order_id"]).first
-        @order.total = params["order"]["total"].to_f
+    if params["id"].present?
+      if @order = Order.find_by_id(params["id"])
         @order.order_items.destroy_all
       end
     end
     @order = Order.new(order_params) unless @order
     respond_to do |format|
-      binding.pry
       if @order.save
         @order.order_items_builder(params["order"]["items"])
-        @order.cost = @order.calculate_cost
-        @order.save
-        session[:_bmp_order_id] = @order.order_id
+        @order.refigure_totals
+        cookies[:_bmp_order_id] = @order.order_id
         format.html { redirect_to new_user_path(order_id: @order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
@@ -143,7 +135,6 @@ class OrdersController < ApplicationController
         Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
           @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
         end
-        # @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
         format.html { render action: 'new' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end
@@ -162,25 +153,17 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1
   # PATCH/PUT /orders/1.json
   def update
-    binding.pry
-    if params["order"]["order_id"].present?
-      #   @title =  params["order"]["order_id"]
-      # else
-      #   @title = "New Order"
-      # end
-      if @order = Order.where(order_id: params["order"]["order_id"]).first
-        @order.total = params["order"]["total"].to_f
+    if params["id"].present?
+      if @order = Order.find_by_id(params["id"])
         @order.order_items.destroy_all
       end
     end
     @order = Order.new(order_params) unless @order
     respond_to do |format|
-      binding.pry
       if @order.save
         @order.order_items_builder(params["order"]["items"])
-        @order.cost = @order.calculate_cost
-        @order.save
-        session[:_bmp_order_id] = @order.order_id
+        @order.refigure_totals
+        cookies[:_bmp_order_id] = @order.order_id
         format.html { redirect_to new_user_path(order_id: @order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
@@ -188,7 +171,6 @@ class OrdersController < ApplicationController
         Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
           @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
         end
-        # @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
         format.html { render action: 'new' }
         format.json { render json: @order.errors, status: :unprocessable_entity }
       end

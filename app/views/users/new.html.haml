@@ -4,4 +4,4 @@
     %h2
       Shipping
     = render partial: 'form'
-    = link_to 'Back', edit_order_path(@order.order_id, user_id: param('user_id'), payment_id: param('payment_id')), class: 'btn btn-default btn-xs'
+    = link_to 'Back', edit_order_path(@order.order_id, user_id: params['user_id'], payment_id: params['payment_id']), class: 'btn btn-default btn-xs'

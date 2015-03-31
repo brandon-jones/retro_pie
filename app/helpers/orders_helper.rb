@@ -24,16 +24,6 @@ module OrdersHelper
 	# 	return "$#{this_price}"
 	# end
 
-	def figure_price(item)
-		if item.markup.include?('$')
-			return Money.new(item.markup.gsub('$','').to_i * 100)
-		elsif item.markup.include?('x')
-			binding.pry
-		elsif item.markup.include?('%')
-			return item.cost * (1 + ( 0.01 * item.markup.gsub('%','').to_i))
-		end
-	end
-
 	def quantity_selector(item)
 		quantity = @order.order_items.where(item_id: item.id).first.quantity if @order.order_items.where(item_id: item.id).first
 		builder = "<select class='dropdown-price-changer price-changer' name='order[items][#{item.category.name}][#{item.id}][quantity]'>"

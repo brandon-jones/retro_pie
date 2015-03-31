@@ -9,7 +9,7 @@
       %table.table
         %thead
           %tr
-            %th 
+            %th
               = link_to 'Clear', '#', class: 'small clear-radios', data: { table: "#{key.downcase}" } unless Category.has_base?(key)
             %th Name
             %th Image
@@ -18,13 +18,13 @@
         %tbody
           -@categories[key].each do |item|
             %tr{class: "#{key.downcase} item-row"}
-              %td= radio_button_tag key.downcase, item.id, item.base_item, {class: 'radio-order-update', selected: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", value: 'true'}
-              %td{class: 'title'}= item.title
+              %td.clear-radios= radio_button_tag key.downcase, item.id, item.base_item, {class: 'radio-order-update', selected: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", value: 'true'}
+              %td.title= item.title
               %td
                 - if item.image_url.present?
                   %img{:alt => "#{item.title}", :src => "#{item.image_url}", :style => "width:50px;height:50px"}
               %td{class: 'price'}
-                =humanized_money_with_symbol(figure_price(item))
+                =humanized_money_with_symbol(item.figure_price)
               %td
                 =quantity_selector(item).html_safe
   #total-box

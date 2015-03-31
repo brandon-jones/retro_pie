@@ -4,8 +4,9 @@
 %p
   %strong Email:
   = @user.email
-%p
-  %strong Phone:
-  = @user.phone
+- if @user.phone.present?
+  %p
+    %strong Phone:
+    = @user.phone
 - unless @receipt.present? && @receipt
-  =link_to 'Edit Shipping Information', edit_user_path(param("user_id"), order_id: param('order_id'), payment_id: param('payment_id')), class: 'btn btn-default btn-sm black'
+  =link_to 'Edit Shipping Information', edit_user_path(params["user_id"], order_id: params['order_id'], payment_id: params['payment_id']), class: 'btn btn-default btn-sm black'

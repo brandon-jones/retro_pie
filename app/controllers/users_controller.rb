@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :authenticate, only: [:index, :show, :destroy]
-  before_action :session_auth, only: [:edit, :update, :show]
+  before_action :session_auth, only: [:edit, :show]
   # GET /users
   # GET /users.json
   def index
@@ -22,9 +22,13 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @order = Order.find_by_order_id(params["order_id"] || cookies[:_bmp_order_id])
+    if @order.user
+      @user = @order.user
+    else
+      @user = User.new
+    end
     @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
-    @order = Order.find_by_order_id(params["order_id"] || session[:_bmp_order_id])
   end
 
   # GET /users/1/edit
@@ -53,10 +57,11 @@ class UsersController < ApplicationController
         @order.shipping_price = $shipping unless @order.delivery_type == 'pickup'
         @order.user_id = @user.id
         @order.save
-        session[:_bmp_user_id] = @user.id
-        format.html { redirect_to verify_order_path(param("order_id"), user_id: @user.id)}
+        cookies[:_bmp_user_id] = @user.id
+        format.html { redirect_to verify_order_path(params["order_id"], user_id: @user.id)}
         format.json { render action: 'show', status: :created, location: @user }
       else
+        binding.pry
         @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
         @order = Order.find_by_order_id(params["order_id"])
         @payment = Payment.find_by_id(params["payment_id"])
@@ -68,16 +73,24 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    @order = Order.where(order_id: params["order_id"]).first
-    @user = User.find_by_id(params["id"])
-    @payment = Payment.find_by_id(params["payment_id"])
+    @user = User.where(email: user_params["email"]).first || User.new(user_params)
+    
     respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to verify_order_path(@order.order_id, user_id: param("user_id"), payment_id: param('payment_id') ) }
-        format.json { head :no_content }
+      if @user.save
+        @order = Order.find_by_order_id(params["order_id"])
+        @order.delivery_type = params["delivery_type"]
+        @order.shipping_price = $shipping unless @order.delivery_type == 'pickup'
+        @order.user_id = @user.id
+        @order.save
+        cookies[:_bmp_user_id] = @user.id
+        format.html { redirect_to verify_order_path(params["order_id"], user_id: @user.id)}
+        format.json { render action: 'show', status: :created, location: @user }
       else
-        format.html { render action: 'edit' }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        binding.pry
+        @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
+        @order = Order.find_by_order_id(params["order_id"])
+        @payment = Payment.find_by_id(params["payment_id"])
+        format.html { render action: 'new', params: params }
       end
     end
   end

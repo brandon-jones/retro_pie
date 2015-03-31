@@ -16,8 +16,8 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   def new
     @payment = Payment.new
-    @user = User.find_by_id(param('user_id'))
-    @order = Order.find_by_order_id(param('order_id'))
+    @user = User.find_by_id(params['user_id'])
+    @order = Order.find_by_order_id(params['order_id'])
   end
 
   # GET /payments/1/edit
@@ -51,7 +51,7 @@ class PaymentsController < ApplicationController
     @order = Order.find_by_order_id(params["payment"]["order_order_id"]) unless @order
     respond_to do |format|
       if @payment.update(payment_params)
-        format.html { redirect_to verify_order_path(@order.order_id, user_id: param("user_id"), payment_id: @payment.id ) }
+        format.html { redirect_to verify_order_path(@order.order_id, user_id: params["user_id"], payment_id: @payment.id ) }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }

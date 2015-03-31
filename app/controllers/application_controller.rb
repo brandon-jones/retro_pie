@@ -31,13 +31,13 @@ class ApplicationController < ActionController::Base
 		end	
 	end
 
-	def param(name)
-		if session["_bmp_#{name.to_sym}"]
-			return session["_bmp_#{name.to_sym}"]
-		elsif params[name]
-			return params[name]
-		end
-		return nil
-	end
+	# def param(name)
+	# 	if session["_bmp_#{name.to_sym}"]
+	# 		return session["_bmp_#{name.to_sym}"]
+	# 	elsif params[name]
+	# 		return params[name]
+	# 	end
+	# 	return nil
+	# end
 
 end

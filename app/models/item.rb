@@ -14,11 +14,11 @@ class Item < ActiveRecord::Base
   	return false
   end
 
-  def self.service_charge
-  	# category = 
-  	category = Category.find_or_create_by(name: 'Serivce Charge')
-  	return Item.new(title: 'Service Charge', description: 'This is my serivce for setting it up. You can not remove this.', cost: $service_charge * 100, base_item: true, category_id: category.id)
-  end
+  # def self.service_charge
+  # 	# category = 
+  # 	category = Category.find_or_create_by(name: 'Serivce Charge')
+  # 	return Item.new(title: 'Service Charge', description: 'This is my serivce for setting it up. You can not remove this.', cost: $service_charge * 100, base_item: true, category_id: category.id)
+  # end
 
 	def correct_format
 		if self.markup.include?('$') || self.markup.include?('%') || self.markup.include?('x')
@@ -26,6 +26,16 @@ class Item < ActiveRecord::Base
 		end
 		self.errors.add(:markup, "markup does not contain required characters")
 		return false
+	end
+
+	def figure_price
+		if self.markup.include?('$')
+			return Money.new(self.markup.gsub('$','').to_i * 100)
+		elsif self.markup.include?('x')
+			binding.pry
+		elsif self.markup.include?('%')
+			return self.cost * (1 + ( 0.01 * self.markup.gsub('%','').to_i))
+		end
 	end
 
 	def self.scrape_data(params)
