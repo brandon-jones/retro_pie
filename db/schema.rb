@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(version: 20150321013909) do
     t.string   "amount_currency", default: "USD", null: false
     t.string   "status"
     t.text     "meta"
+    t.string   "type"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
   end
@@ -100,6 +101,11 @@ ActiveRecord::Schema.define(version: 20150321013909) do
     t.string   "name"
     t.string   "email"
     t.string   "phone"
+    t.string   "apt_number"
+    t.string   "street"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

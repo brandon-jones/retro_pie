@@ -1,36 +1,23 @@
 class User < ActiveRecord::Base
-	validates_presence_of :name, :email
-  before_save :shipping_required
+  attr_accessor :delivery_type
+  validates_presence_of :name, :email
+  validates_presence_of :street, :city, :state, :zip_code, :if => :shipping_required?
   has_many :orders
 
-	# include BCrypt
+  # include BCrypt
 
-  def shipping_required
-    if self.delivery_type == 'delivery'
-      binding.pry
+  def shipping_required?
+    if @delivery_type == 'delivery'
+      return true
     end
-    return true
+    return false
   end
 
-  def orders
-    return Order.where(user_id: self.id)
-  end
+  # def orders
+  #   return Order.where(user_id: self.id)]
+  # end
 
-	# def password
- #    @password ||= Password.new(password_hash)
- #  end
-
- #  def password=(new_password)
- #    @password = Password.create(new_password)
- #    self.password_digest = @password
- #  end
-
- #  def new_session_id
- #  	self.session_token_expiration = DateTime.now.utc + 24.hours
- #  	self.session_token = SecureRandom.hex(16)
- #  end
-
-  def delivery_type
+  def delivery_types
     return [['Pickup','pickup'],['Delivery','delivery']]
   end
 end

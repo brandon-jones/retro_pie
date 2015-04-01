@@ -10,11 +10,11 @@ class Payment < ActiveRecord::Base
 	# 	self.save
 	# end
 
-	def amount
-		if self.status == 'pending' || self.status == nil
-			self.order.total
-		else
-			return super
-		end
-	end
+	# def amount
+	# 	if self.status == 'pending' || self.status == nil
+	# 		self.order.total
+	# 	else
+	# 		return super
+	# 	end
+	# end
 end

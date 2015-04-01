@@ -26,11 +26,11 @@ RetroPie::Application.routes.draw do
     member do
       patch 'update'
       get 'verify'
-      post 'verify'
+      post 'charge'
     end
     collection do
       post 'update_status'
-      post 'appreciation'
+      get 'appreciation'
       get 'sorry'
       get 'status'
       get 'stats'

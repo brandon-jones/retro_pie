@@ -95,6 +95,41 @@ class OrdersController < ApplicationController
     end
   end
 
+  def charge
+    if order = Order.find_by_order_id(params["id"])
+
+      begin
+        charge = Stripe::Charge.create(
+          :amount => order.total_cents, # amount in cents, again
+          :currency => "usd",
+          :source => params[:stripeToken],
+          :description => "Bake My PIe"
+        )
+      rescue Stripe::CardError => e
+        flash[:error] = e.message
+        redirect_to verify_order_path(id: order.id) and return
+      end
+
+      success = false
+
+      if charge.status == 'succeeded' && charge.source.cvc_check == 'pass' && charge.source.cvc_check == 'pass'
+        payment = Payment.new(order_id: order.id, amount_cents: charge.amount, status: charge.status, method: 'card', meta: charge)
+        if payment.save
+          success = true
+        end
+      end
+
+      if success
+        redirect_to appreciation_orders_path and return
+      else
+        flash[:error] = e.message
+        redirect_to verify_order_path(id: order.id) and return
+      end
+
+    end
+    binding.pry
+  end
+
   def appreciation
 
     UpdatePaymentInfo.perform_async(params)

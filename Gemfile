@@ -30,6 +30,8 @@ gem 'bcrypt', '~> 3.1.9'
 
 gem 'rails_12factor', group: :production
 
+gem 'stripe', '~> 1.20.4'
+
 # gem 'sidekiq'
 
 gem 'money-rails'

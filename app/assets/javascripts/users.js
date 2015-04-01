@@ -1,6 +1,7 @@
 var showShippingInfo;
 
 $(function() {
+	showShippingInfo();
   return $("#select-delivery-type").on("change", showShippingInfo);
 });
 

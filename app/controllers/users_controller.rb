@@ -48,8 +48,8 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
+    @delivery_type = params["delivery_type"]
     @user = User.where(email: user_params["email"]).first || User.new(user_params)
-    
     respond_to do |format|
       if @user.save
         @order = Order.find_by_order_id(params["order_id"])
@@ -61,7 +61,6 @@ class UsersController < ApplicationController
         format.html { redirect_to verify_order_path(params["order_id"], user_id: @user.id)}
         format.json { render action: 'show', status: :created, location: @user }
       else
-        binding.pry
         @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
         @order = Order.find_by_order_id(params["order_id"])
         @payment = Payment.find_by_id(params["payment_id"])
@@ -73,8 +72,8 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    @delivery_type = params["delivery_type"]
     @user = User.where(email: user_params["email"]).first || User.new(user_params)
-    
     respond_to do |format|
       if @user.save
         @order = Order.find_by_order_id(params["order_id"])
@@ -86,7 +85,6 @@ class UsersController < ApplicationController
         format.html { redirect_to verify_order_path(params["order_id"], user_id: @user.id)}
         format.json { render action: 'show', status: :created, location: @user }
       else
-        binding.pry
         @state_abreviations = ['AK','AL','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
         @order = Order.find_by_order_id(params["order_id"])
         @payment = Payment.find_by_id(params["payment_id"])
@@ -113,6 +111,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email, :phone)
+      params.require(:user).permit(:name, :email, :phone, :street, :city, :state, :zip_code, :apt_number, :delivery_type)
     end
 end

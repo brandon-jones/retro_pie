@@ -18,7 +18,12 @@
       %h4
         Please note. I will get the best items I can for the money. This means that the items in the pictures are used as representations. I will get you the best item I can.
     %p.text-center
-      - locals = Rails.env == 'development' ? { url: 'sandbox.paypal', business: 'WWT4KH9KAMUJQ', server_address: 'http://localhost:3003' } : { url: 'paypal', business: 'KELDMZTJ73GDA', server_address: 'http://bakemypie.com' }
-      = render partial: 'payment_button', locals: locals
-    %p
-      Make sure to click back to my site after paying through paypal. Doing this means I get payment verification much faster.
+      .row
+        .col-md-6
+          %form{:action => "#{charge_order_path}", :method => "POST"}
+            = tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token)            
+            %script.stripe-button{"data-amount" => "#{@order.total_cents + @order.shipping_price_cents}", "data-description" => "An Emulation System", "data-image" => "#{image_url('mario_jump.png')}", "data-key" => "#{Rails.configuration.stripe[:publishable_key]}", "data-name" => "Bake My PIe", :src => "https://checkout.stripe.com/checkout.js", "data-email" => "#{@user.email}", "data-panel-label" => "Pay", "data-allow-remember-me" => "false", "data-zip-code" => "true"}
+        .col-md-6
+          %button.mimic-strip-button{:type => "button"} 
+            %span.mimic-strip-button-span
+              Pay Cash
