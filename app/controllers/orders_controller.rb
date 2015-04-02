@@ -98,6 +98,7 @@ class OrdersController < ApplicationController
   def charge
     if order = Order.find_by_order_id(params["id"])
       
+      order.update_attribute(:status_id, Status.find_by_name('Payment Processing'))
       begin
         charge = Stripe::Charge.create(
           :amount => order.total_cents, # amount in cents, again
@@ -106,6 +107,7 @@ class OrdersController < ApplicationController
           :description => "Bake My PIe"
         )
       rescue Stripe::CardError => e
+        order.update_attribute(:status_id, Status.find_by_name('Payment Denied'))
         flash[:error] = e.message
         redirect_to verify_order_path(id: order.id) and return
       end
@@ -120,6 +122,8 @@ class OrdersController < ApplicationController
       end
 
       if success
+        cookies[:_bmp_order_id] = nil
+        order.update_attribute(:status_id, Status.find_by_name('Payment Recieved'))
         redirect_to appreciation_orders_path and return
       else
         flash[:error] = e.message
