@@ -32,6 +32,8 @@ gem 'rails_12factor', group: :production
 
 gem 'stripe', '~> 1.20.4'
 
+gem "recaptcha", require: "recaptcha/rails", github: "ambethia/recaptcha"
+
 # gem 'sidekiq'
 
 gem 'money-rails'

@@ -15,14 +15,18 @@ Category.create(name: 'Hdmi Cable')
 Category.create(name: 'Controllers')
 Category.create(name: 'Keyboard')
 Category.create(name: 'Service Charge')
+Category.create(name: 'Wifi')
 
 puts 'seeding status'
 Status.create(name: "Unsubmitted", description: 'I have not heard back on payment.')
-Status.create(name: "Ordered", description: 'Got a payment will start building soon.')
-Status.create(name: "Building", description: 'I have started building your PI')
-Status.create(name: "Shipped", description: 'The PI has been shipped.')
-Status.create(name: "Returned", description: 'The order was returned and maybe refuneded.')
-Status.create(name: "Closed", description: 'The order was shipping and recieved.')
+Status.create(name: "Payment Processing", description: 'Payment has been submitted but not recieved.')
+Status.create(name: "Payment Recieved", description: 'I have the payment will start building soon')
+Status.create(name: "Payment Denied", description: 'We need to talk.')
+Status.create(name: "Parts Ordered", description: 'Building will start soon.')
+Status.create(name: "Building", description: 'I am working on your pi.')
+Status.create(name: "Shipped", description: 'You should get your pi soon.')
+Status.create(name: "Refuneded", description: 'You were unhappy.')
+Status.create(name: "Closed", description: 'All is good.')
 
 puts 'filling faq'
 faqs = YAML.load_file("config/faq.yml")

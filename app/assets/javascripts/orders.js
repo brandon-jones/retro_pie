@@ -26,6 +26,25 @@ clearRadioButtons = function(rows) {
   });
 };
 
+tableHasAnyChecked = function(rows) {
+  $.each(rows, function( index, value ) {
+    if (value.children[0].children[0].checked == true) {
+      return true
+    }
+  });
+  return false;
+}
+
+tableHasBase = function(rows) {
+  var base = false;
+  $.each(rows, function( index, value ) {
+    if (value.dataset.base == "true") {
+      base = value.children[0].children[0];
+    }
+  });
+  return base;
+};
+
 updateRadioButtons = function(e) {
   e.stopPropagation();
   // e.preventDefault();
@@ -33,9 +52,21 @@ updateRadioButtons = function(e) {
   var table = selected_radio.id.split('_')[0];
   var rows = $('.'+table);
 
-  clearRadioButtons(rows);
-
-  selected_radio.checked = true;
+  if (selected_radio.checked == false) {
+    var checked = tableHasAnyChecked(rows);
+    if (checked == false) {
+      var base = tableHasBase(rows);
+      if (base) {
+        base.checked = true;
+      }
+    }
+  } else {
+    var base = tableHasBase(rows);
+    if (base) {
+      clearRadioButtons(rows);
+      selected_radio.checked = true;
+    }
+  }
 
   updateFinalTotal();
 }
@@ -79,7 +110,9 @@ updateFinalTotal = function(event) {
       total_price = total_price + price;
     }
   });
-  return $('.total').text("$" + Math.round(total_price * 100) / 100);
+ var temp = (total_price).toLocaleString("en-USD", {style: "currency", currency: "USD", minimumFractionDigits: 2}) 
+  // return $('.total').text("$" + Math.round(total_price * 100) / 100);
+  return $('.total').text(temp);
 };
 
 getPrice = function(row, quantity) {

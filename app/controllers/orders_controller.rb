@@ -24,10 +24,10 @@ class OrdersController < ApplicationController
     binding.pry
   end
 
-  def update_status
-    UpdatePaymentInfo.perform_async(params)
-    render :text => ""
-  end
+  # def update_status
+  #   UpdatePaymentInfo.perform_async(params)
+  #   render :text => ""
+  # end
 
   def status
     @statuses = Status.all
@@ -97,7 +97,7 @@ class OrdersController < ApplicationController
 
   def charge
     if order = Order.find_by_order_id(params["id"])
-
+      
       begin
         charge = Stripe::Charge.create(
           :amount => order.total_cents, # amount in cents, again
@@ -132,22 +132,22 @@ class OrdersController < ApplicationController
 
   def appreciation
 
-    UpdatePaymentInfo.perform_async(params)
+    # UpdatePaymentInfo.perform_async(params)
   end
 
-  def submit_order
-    binding.pry
-    @order = Order.where(order_id: params["id"]).first
-    @user = User.find_by_id(params["OrderId"])
-    @order = Order.where(order_id: params["order"]["order_id"]).first
-    @order.status_id = Status.find_by_name('Ordered')
-    @order.cost = @order.calculate_cost
-    if @order.save
-      redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
-    else
-      redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
-    end
-  end
+  # def submit_order
+  #   binding.pry
+  #   @order = Order.where(order_id: params["id"]).first
+  #   @user = User.find_by_id(params["OrderId"])
+  #   @order = Order.where(order_id: params["order"]["order_id"]).first
+  #   @order.status_id = Status.find_by_name('Ordered')
+  #   @order.cost = @order.calculate_cost
+  #   if @order.save
+  #     redirect_to order_path(@order.order_id), { notice: 'Order status has been updated. You will be contacted shortly.' }
+  #   else
+  #     redirect_to verify_order_path(@order.order_id), {notice: 'Some error prevented updating the information.' }
+  #   end
+  # end
 
   # POST /orders
   # POST /orders.json
@@ -158,14 +158,16 @@ class OrdersController < ApplicationController
       end
     end
     @order = Order.new(order_params) unless @order
+
     respond_to do |format|
-      if @order.save
+      if verify_recaptcha && @order.save
         @order.order_items_builder(params["order"]["items"])
         @order.refigure_totals
         cookies[:_bmp_order_id] = @order.order_id
         format.html { redirect_to new_user_path(order_id: @order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
+        @order.errors.add(:captcha, "Please fill out captcha") unless verify_recaptcha
         @categories = {}
         Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
           @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
@@ -194,14 +196,16 @@ class OrdersController < ApplicationController
       end
     end
     @order = Order.new(order_params) unless @order
+
     respond_to do |format|
-      if @order.save
+      if verify_recaptcha && @order.save
         @order.order_items_builder(params["order"]["items"])
         @order.refigure_totals
         cookies[:_bmp_order_id] = @order.order_id
         format.html { redirect_to new_user_path(order_id: @order.order_id) }
         format.json { render action: 'show', status: :created, location: @order }
       else
+        @order.errors.add(:captcha, "Please fill out captcha") unless verify_recaptcha
         @categories = {}
         Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
           @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)

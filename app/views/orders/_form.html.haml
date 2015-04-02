@@ -1,5 +1,13 @@
 - params["order"] = {} unless params["order"]
 - order = Hash.new
+- if @order.errors.any?
+  #error_explanation.field.form-group
+    %h2
+      = pluralize(@order.errors.count, "error")
+      prohibited this order from being saved:
+    %ul
+      - @order.errors.full_messages.each do |msg|
+        %li= msg
 = form_for(@order) do |f|
   -@categories.keys.each do |key|
     - if @categories[key].count > 0
@@ -17,8 +25,9 @@
             %th Quantity
         %tbody
           -@categories[key].each do |item|
-            %tr{class: "#{key.downcase} item-row"}
-              %td.clear-radios= radio_button_tag key.downcase, item.id, item.base_item, {class: 'radio-order-update', selected: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", value: 'true'}
+            %tr{class: "#{key.downcase} item-row", data: { base: "#{item.base_item}" }}
+              %td.clear-radios.center
+                = check_box_tag key.downcase, item.id, item.base_item, {class: "radio-order-update", selected: item.base_item , name: "order[items][#{item.category.name}][#{item.id}][ordered]", value: 'true'}
               %td.title= item.title
               %td
                 - if item.image_url.present?
@@ -39,6 +48,7 @@
       %ul
         - @order.errors.full_messages.each do |msg|
           %li= msg
+  = recaptcha_tags
   .actions
     - buttn_txt = params["action"] == 'edit' ? 'Update Order' : 'Delivery Information'
     = f.submit buttn_txt, class: 'btn btn-primary'

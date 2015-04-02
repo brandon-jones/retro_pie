@@ -20,5 +20,8 @@
                 = label_tag(:body_label, "Reason for contact:")
               = text_area_tag(:body, params["body"], class: "form-control contact_me_body")
             %div.form-group
+              %p
+                = recaptcha_tags
+            %div.form-group
               .actions
                 = submit_tag("Send Question",class: 'btn btn-default')

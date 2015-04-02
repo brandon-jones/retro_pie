@@ -46,9 +46,9 @@ class Order < ActiveRecord::Base
 		create_order_items(final_items)
 	end
 
-	def calculate_cost
-		return stats[1]
-	end
+	# def calculate_cost
+	# 	return stats[1]
+	# end
 
 	def stats
 		item_total = 0
@@ -60,11 +60,11 @@ class Order < ActiveRecord::Base
 		return item_total, item_cost
 	end
 
-	def has_details?
-		return true if self.shipping_info.length > 0
-		return true if self.special_instructions.length > 0
-		return false
-	end
+	# def has_details?
+	# 	return true if self.shipping_info.length > 0
+	# 	return true if self.special_instructions.length > 0
+	# 	return false
+	# end
 
 	# def ordered_items(category_items)
 	# 	binding.pry
@@ -95,9 +95,9 @@ class Order < ActiveRecord::Base
 		end
 	end
 
-	def verify_price(their_price, my_price)
-		return true if their_price == my_price
-		return false
-	end
+	# def verify_price(their_price, my_price)
+	# 	return true if their_price == my_price
+	# 	return false
+	# end
 
 end
