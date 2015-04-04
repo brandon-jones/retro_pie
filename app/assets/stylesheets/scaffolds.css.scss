@@ -1,5 +1,23 @@
+
+
 .xx-small {
   font-size: xx-small;
+}
+
+.title-font {
+  font-family: "arcade-font";
+  color: red;
+  font-size: 800%;
+  text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+}
+
+@font-face {
+    font-family: 'arcade-font';
+    src: url('/assets/arcade.eot');
+    src: url('/assets/arcade.eot?iefix') format('eot'),
+         url('/assets/arcade.woff') format('woff'),
+         url('/assets/arcade.ttf') format('truetype'),
+         url('/assets/arcade.svg#webfont') format('svg');
 }
 
 .center {
@@ -15,8 +33,13 @@
 #title {
   
 }
+
 body {
   background-color: #fff;
+  background-image: image-url("tetris.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center; 
   color: #333;
   font-family: verdana, arial, helvetica, sans-serif;
   font-size: 13px;

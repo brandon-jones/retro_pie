@@ -1,6 +1,4 @@
 #header.text-center
-	= puts "CONTROLLER: #{params["controller"]}"
-	= puts params
 	=link_to 'Home', root_path, class: "btn btn-info" + (params["controller"] == 'static_pages' && params["action"] == 'index' ? " active" : "")
 	=link_to 'Bake my Pie', new_order_path, class: "btn btn-danger" + (params["controller"] == 'orders' && params["action"] == 'new' ? " active" : "")
 	=link_to 'Check Order Status', status_orders_path, class: "btn btn-info" + (params["controller"] == 'orders' && params["action"] == 'status' ? " active" : "")

@@ -1,10 +1,11 @@
 - @faqs.each do |faq|
-  %p
-    %strong
-      Q
-    = faq.question
-  %p
-    %strong
-      A
-    = faq.answer
-  %hr
+  .faq-wrapper
+    %p
+      %strong
+        Q
+      = faq.question
+    %p
+      %strong
+        A
+      = faq.answer
+    %hr

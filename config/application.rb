@@ -10,6 +10,8 @@ module RetroPie
   class Application < Rails::Application
     
     $shipping = YAML.load_file("config/globals.yml")["shipping"]
+
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
