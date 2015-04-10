@@ -76,7 +76,7 @@ class OrdersController < ApplicationController
     Category.all.collect{|cat| [ cat.id, cat.name] }.each do |cat|
       @categories[cat[1]] = Item.all.where(category_id: cat[0]).where(base_item: true) + Item.all.where(category_id: cat[0]).where(base_item: false)
     end
-    @categories["Service Charge"] = [Item.service_charge]
+    # @categories["Service Charge"] = [Item.service_charge]
     # @delivery_types = [['Local Pickup','local_pickup'],['Delivery','delivery']]
   end
 

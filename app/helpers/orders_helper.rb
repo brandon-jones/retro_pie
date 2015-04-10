@@ -47,11 +47,11 @@ module OrdersHelper
 		return ''
 	end
 
-	# def format_init_price
-	# 	if @order.total
-	# 		return "$#{'%.0f' % @order.total.to_f}"
-	# 	end
-	# 	return "$#{'%.0f' % $base_fee}"
-	# end
+	def format_init_price
+		if @order.total
+			return "$#{'%.0f' % @order.total.to_f}"
+		end
+		return "$#{'%.0f' % $base_fee}"
+	end
 
 end
