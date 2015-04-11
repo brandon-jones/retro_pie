@@ -1,27 +1,29 @@
 = link_to 'New Item', new_item_path
-- @items.each do |item|
-  %div.row
-    %div.col-md-7.col-md-offset-1
-      %h3
-        =item.title
-      %p
-        =item.description.gsub("\n","<br>").html_safe
-      %p
-        Price: 
-        $#{item.cost}
-        | Markup:
-        =item.markup
-      %p
-        Category:
-        =item.category.name
-        |
-        Base Item:
-        =item.base_item
-      = link_to 'Show', item
-      |
-      = link_to 'Edit', edit_item_path(item)
-      |
-      = link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' }
-    %div.col-md-1
-      %p
-        %img{:alt => "#{item.title}", :src => "#{item.image_url}"}/
+.row
+  .col-md-10.col-md-offset-1.wrapper
+    - @items.each do |item|
+      .row
+        .col-md-6
+          %h3
+            =item.title
+          %p
+            =item.description.gsub("\n","<br>").html_safe
+          %p
+            Price: 
+            $#{item.cost}
+            | Markup:
+            =item.markup
+          %p
+            Category:
+            =item.category.name
+            |
+            Base Item:
+            =item.base_item
+          = link_to 'Show', item
+          |
+          = link_to 'Edit', edit_item_path(item)
+          |
+          = link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' }
+        .col-md-6
+          %p
+            %img{:alt => "#{item.title}", :src => "#{item.image_url}", class: 'item-image'}/

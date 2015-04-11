@@ -48,7 +48,8 @@
       %ul
         - @order.errors.full_messages.each do |msg|
           %li= msg
-  = recaptcha_tags
+  - unless params["action"] == "edit"
+    = recaptcha_tags
   .actions
     - buttn_txt = params["action"] == 'edit' ? 'Update Order' : 'Delivery Information'
     = f.submit buttn_txt, class: 'btn btn-primary'

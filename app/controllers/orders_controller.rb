@@ -95,10 +95,33 @@ class OrdersController < ApplicationController
     end
   end
 
+  def cash
+    if order = Order.find_by_order_id(params["id"])
+
+      success = false
+
+      payment = Payment.new(order_id: order.id, amount_cents: order.total_cents, status: 'need to pick up', method: 'cash')
+      if payment.save
+        success = true
+      end
+
+      if success
+        cookies[:_bmp_order_id] = nil
+        status = Status.find_by_name('Payment Processing')
+        order.update_attribute(:status_id, status.id || nil)
+        redirect_to appreciation_orders_path and return
+      else
+        flash[:error] = e.message
+        redirect_to verify_order_path(id: order.id) and return
+      end
+
+    end
+  end
+
   def charge
     if order = Order.find_by_order_id(params["id"])
-      
-      order.update_attribute(:status_id, Status.find_by_name('Payment Processing'))
+      status = Status.find_by_name('Payment Processing')
+      order.update_attribute(:status_id, status.id || nil)
       begin
         charge = Stripe::Charge.create(
           :amount => order.total_cents, # amount in cents, again
@@ -107,7 +130,8 @@ class OrdersController < ApplicationController
           :description => "Bake My PIe"
         )
       rescue Stripe::CardError => e
-        order.update_attribute(:status_id, Status.find_by_name('Payment Denied'))
+        status = Status.find_by_name('Payment Denied')
+        order.update_attribute(:status_id, status.id || nil)
         flash[:error] = e.message
         redirect_to verify_order_path(id: order.id) and return
       end
@@ -123,7 +147,8 @@ class OrdersController < ApplicationController
 
       if success
         cookies[:_bmp_order_id] = nil
-        order.update_attribute(:status_id, Status.find_by_name('Payment Recieved'))
+        status = Status.find_by_name('Payment Recieved')
+        order.update_attribute(:status_id, status.id || nil)
         redirect_to appreciation_orders_path and return
       else
         flash[:error] = e.message
@@ -202,7 +227,7 @@ class OrdersController < ApplicationController
     @order = Order.new(order_params) unless @order
 
     respond_to do |format|
-      if verify_recaptcha && @order.save
+      if @order.save
         @order.order_items_builder(params["order"]["items"])
         @order.refigure_totals
         cookies[:_bmp_order_id] = @order.order_id

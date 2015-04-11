@@ -1,10 +1,10 @@
 -@title = 'All Orders'
 %div.row
-  %div.col-md-10.col-md-offset-1
-    %p{class: 'save_order_button block'}
+  %div.col-md-12.wrapper
+    %p{class: 'save_order_button inline-block'}
       %a{href: "#{orders_path}", class: 'btn btn-default'}
         Status
-    %p{class: 'pull-right save_order_button block'}
+    %p{class: 'pull-right save_order_button inline-block'}
       %a{href: '#', class: 'btn btn-danger hidden', id: 'save_order_edits'}
         Save
     #order_table

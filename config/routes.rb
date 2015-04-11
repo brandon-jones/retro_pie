@@ -27,6 +27,7 @@ RetroPie::Application.routes.draw do
       patch 'update'
       get 'verify'
       post 'charge'
+      post 'cash'
     end
     collection do
       post 'update_status'

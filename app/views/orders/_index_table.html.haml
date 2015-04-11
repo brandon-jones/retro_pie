@@ -16,10 +16,6 @@
         %a{href: '#', class: 'change_sort', data: 'email'}
           Email
       %th 
-        =caret('perferred_contact').html_safe
-        %a{href: '#', class: 'change_sort', data: 'perferred_contact'}
-          Phone Number
-      %th 
         =caret('total').html_safe
         %a{href: '#', class: 'change_sort', data: 'total'}
           Total Price
@@ -29,18 +25,15 @@
           Status
       %th
       %th
-      %th
   %tbody
     - @orders.each do |order|
       %tr{class: 'order-row'}
         %td{class: 'order_id'}= order.order_id
         %td=order.user.name
         %td=order.user.email
-        %td=order.user.phone
-        %td= '$' + '%.2f' % order.total
+        %td=humanized_money_with_symbol(order.total)
         %td= select_tag order.id, options_for_select(@statuses, order.status.id), {class: 'order-change status_id'}
         %td= link_to 'Details', '#', {class: 'btn btn-primary btn-xs order-details', data: "#{order.order_id}"}
-        %td= link_to 'Edit', edit_order_path(order.order_id), {class: 'btn btn-warning btn-xs'}
         %td= link_to 'Destroy', "orders/#{order.order_id}", method: :delete,class: 'btn btn-danger btn-xs', data: { confirm: 'Are you sure?' }
 
       %tr{id: "#{order.order_id}", style: "display:none", class: 'details-row'}

@@ -1,13 +1,11 @@
-%div.row
-  %div.col-md-8.col-md-offset-2
+.row
+  .col-md-8.col-md-offset-2.wrapper
     %h1.text-center Frequenty Asked Questions
-    %br
-    %p
-      %div.row
-        %div.col-md-3.col-md-offset-1
-          %strong
-            Search FAQs Questions
-        %div.col-md-7
-          =text_field_tag :question,'', class: 'form-control', id: 'faq-search'
-    #faq-section
-      = render partial: 'faq'
+    .row
+      .col-md-3.col-md-offset-1
+        %strong
+          Search FAQs Questions
+      .col-md-7
+        =text_field_tag :question,'', class: 'form-control', id: 'faq-search'
+#faq-section
+  = render partial: 'faq'

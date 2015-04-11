@@ -24,6 +24,10 @@
             = tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token)            
             %script.stripe-button{"data-amount" => "#{@order.total_cents + @order.shipping_price_cents}", "data-description" => "An Emulation System", "data-image" => "#{image_url('mario_jump.png')}", "data-key" => "#{Rails.configuration.stripe[:publishable_key]}", "data-name" => "Bake My PIe", :src => "https://checkout.stripe.com/checkout.js", "data-email" => "#{@user.email}", "data-panel-label" => "Pay", "data-allow-remember-me" => "false", "data-zip-code" => "true"}
         .col-md-6
-          %button.mimic-strip-button{:type => "button"} 
-            %span.mimic-strip-button-span
-              Pay Cash
+          %form#myform{:action => "#{cash_order_path}", :method => "POST"}
+            = tag(:input, :type => "hidden", :name => request_forgery_protection_token.to_s, :value => form_authenticity_token) 
+            %input{:name => "name", :type => "hidden", :value => "cash"}
+            %input{:name => "user_id", :type => "hidden", :value => "#{@user.id}"}
+            %a.mimic-strip-button{:onclick => "document.getElementById('myform').submit();"}
+              %span.mimic-strip-button-span
+                Pay Cash
